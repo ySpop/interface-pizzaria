@@ -5,13 +5,15 @@
   background-color: #fff;
   padding: 15px;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+  display: none;
   opacity: 0;
   visibility: hidden;
 }
 
-.activeComanda {
+.active {
   opacity: 1;
   visibility: visible;
+  display: block;
 }
 
 input {
@@ -169,14 +171,10 @@ input {
   transform: translateX(0) scale(1.1);
 }
 
-#btn-reset-form {
-  padding: 3px 10px 3px 10px;
-  background-color: red;
-}
-
-#btn-send-form {
-  padding: 3px 10px 3px 10px;
-  background-color: green;
+.buttons-container {
+  border: 2px solid red;
+  display: flex;
+  justify-content: space-between;
 }
 
 #btn-delete-last-item {

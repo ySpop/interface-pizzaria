@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Hugo Domingos Pina" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="stylesheet" href="/styles/comanda.css" />
+    <link rel="stylesheet" href="/styles/addproductdb.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.css">
+    <title>Pizzaria Pina</title>
+
+    <script defer src="/scripts/menu.js"></script>
+    <script defer src="/scripts/formData.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.js"></script>
+
+  </head>
+  <body class="body">
+    <header class="header">
+      <section class="header-content container-grid">
+        <h3 class="header-content-title">Pizzaria Pina</h3>
+
+        <button class="btn-menu">Menu</button>
+      </section>
+    </header>
+
+    <main>
+      <section class="main-content">
+        <section class="menu-opcoes-holder">
+          <section class="menu-opcoes-content">
+            <div class="menu-content-top">
+              <img
+                class="btn-close-menu"
+                src="/assets/icons/close_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                alt="Fechar menu"
+              />
+            </div>
+            <div class="buttons-container">
+              <button class="btn-comanda menu-buttons">
+                Adicionar comanda
+              </button>
+
+              <button class="btn-newproductdb menu-buttons">
+                Adicionar produto ao DB
+              </button>
+
+              <button class="btn-removeproductdb menu-buttons">
+                Remover produto do DB
+              </button>
+
+              <button class="btn-editproductdb menu-buttons">
+                Alterar produto do DB
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <section class="comanda-content">
+          <form class="comanda-form" id="venda-form">
+            <div class="comanda-top-container">
+              <div class="comanda-top-left">
+                <img
+                  src="/assets/icons/schedule_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  alt="Horário"
+                />
+                <h5 class="comanda-time-text">Digite a hora</h5>
+              </div>
+              <input class="input-order-time" type="time" name="order-time" />
+            </div>
+
+            <div class="comanda-items-container">
+              <div class="comanda-items-top">
+                <img
+                  src="/assets/icons/note_alt_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  alt="Notas"
+                />
+                <h5 class="comanda-items-text">Digite os itens</h5>
+              </div>
+
+              <div class="inputs-container">
+                <div class="inputs-container-item">
+              </div>
+                <div class="inputs-container-quantity">
+                </div>
+              </div>
+            </div>
+
+            <div class="comanda-items-btn">
+              <button class="btn-add-item">Adicionar item</button>
+            </div>
+
+            <div class="comanda-address-container">
+              <div class="comanda-address-top">
+                <img
+                  src="/assets/icons/location_on_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  alt="Localização"
+                />
+                <h5 class="comanda-address-text">Digite o endereço</h5>
+
+                <input class="input-address" type="text" name="order-address" />
+                <input
+                  class="input-address-number"
+                  type="number"
+                  name="order-address-number"
+                />
+              </div>
+            </div>
+
+            <div class="comanda-bottom-container">
+              <div class="comanda-method-container">
+                <img
+                  src="/assets/icons/credit_card_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  alt="Método de pagamento"
+                />
+                <h5 class="comanda-method-text">
+                  Digite o método de pagamento
+                </h5>
+
+                <input
+                  class="input-method-payment"
+                  type="text"
+                  name="method-payment"
+                  maxlength="20"
+                />
+              </div>
+              <div class="comanda-cost-container">
+                <img
+                  src="/assets/icons/attach_money_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  alt="Custo"
+                />
+                <h5 class="comanda-cost-text">Digite o preço</h5>
+
+                <input
+                  class="input-cost-payment"
+                  type="number"
+                  name="cost-payment"
+                  maxlength="20"
+                />
+              </div>
+            </div>
+
+            <div class="buttons-form">
+              <button id="btn-delete-last-item">Retroceder item</button>
+              <button id="btn-reset-form" class="erase-button">Apagar</button>
+              <button type="submit" id="btn-send-form" class="send-button">Enviar</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="add-product-content">
+          <form class="add-product-form" id="add-product-form">
+            <div class="add-product-top">
+              <h4>Preencha as informações para adicionar um item ao banco de dados.</h4>
+            </div>
+
+            <hr class="form-line">
+  
+            <div class="add-product-name add-product-inputs">
+              <img src="/assets/icons/edit_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg">
+              <input type="text" name="product-name" placeholder="Digite o nome do produto">
+            </div>
+
+            <div class="add-product-description add-product-inputs">
+              <img src="/assets/icons/description_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg">
+              <input type="text" name="product-description" placeholder="Digite a descrição do produto">
+            </div>
+
+            <div class="add-product-price add-product-inputs">
+              <img
+                  src="/assets/icons/attach_money_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  alt="Custo"
+                />
+                <input type="number" name="product-price" placeholder="Digite o preço do produto" step="0.01" min="0" />
+            </div>
+
+            <div class="add-product-size add-product-inputs">
+              <img src="/assets/icons/straighten_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg">
+              <input type="text" name="product-size" placeholder="Digite o tamanho do produto">
+            </div>
+
+            <div class="add-product-type add-product-inputs">
+              <img
+              src="/assets/icons/format_list_bulleted_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+              alt="Custo"
+            />
+              <select id="product-type-selector" name="product-type" required>
+                <option value="Pizza">Pizza</option>
+                <option value="Calzone">Calzone</option>
+                <option value="Porçao">Porção</option>
+                <option value="Beirute">Beirute</option>
+                <option value="Esfiha_Doce">Esfiha Doce</option>
+                <option value="Bebida">Bebida</option>
+              </select>
+            </div>
+
+            <div class="buttons-form">
+              <button class="erase-button btn-reset-form">Apagar</button>
+              <button id="send-addproduct-form" class="send-button">Enviar</button>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <section class="footer-content container-grid">Footer</section>
+    </footer>
+  </body>
+</html>

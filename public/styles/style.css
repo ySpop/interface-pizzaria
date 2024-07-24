@@ -7,6 +7,8 @@
 }
 
 main {
+  width: 100vw;
+  height: 100vh;
   position: relative;
   z-index: 1;
   display: flex;
@@ -149,6 +151,23 @@ main {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.1s ease visibility 0.1s ease;
+}
+
+.form-line {
+  border: 1px solid orange;
+  border-radius: 8px;
+  background-color: chocolate;
+  margin-bottom: 10px;
+}
+
+.send-button {
+  padding: 3px 10px 3px 10px;
+  background-color: green;
+}
+
+.erase-button {
+  padding: 3px 10px 3px 10px;
+  background-color: red;
 }
 
 .footer-content {
