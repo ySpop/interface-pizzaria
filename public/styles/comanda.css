@@ -32,24 +32,45 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  h5 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+  }
 }
 
 .comanda-top-container {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.comanda-top-time {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  /* border: 2px solid red; */
+  gap: 5px;
+}
+
+.comanda-top-date {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.input-order-date {
+  width: 100px;
+  padding: 5px;
+  text-align: center;
 }
 
 .comanda-top-left {
   display: flex;
   align-items: center;
   gap: 5px;
-}
-
-.comanda-time-text {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
 }
 
 .comanda-items-container {
@@ -77,6 +98,20 @@ input {
   gap: 5px;
   text-wrap: nowrap;
   /* border: 2px solid red; */
+}
+
+.comanda-address-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 5px;
+}
+
+.comanda-address-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
 }
 
 .comanda-address-text {
@@ -216,5 +251,5 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }

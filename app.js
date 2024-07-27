@@ -13,7 +13,7 @@ const sqlConfig = {
   database: "dbPP",
   server: "localhost",
   options: {
-    encrypt: false, 
+    encrypt: false,
     trustServerCertificate: true,
   },
 };
@@ -42,13 +42,15 @@ app.post("/venda-submit", async (req, res) => {
     const decimalValue = parseFloat(formData["cost-payment"]).toFixed(2);
 
     const insertVendaQuery = `
-      INSERT INTO vendas (order_time, order_address, order_address_number, method_payment, cost_payment)
+      INSERT INTO vendas (order_time, order_address, order_address_number, method_payment, cost_payment, order_date, order_neighbourhood)
       VALUES (
         '${escapeString(formData["order-time"])}',
         '${escapeString(formData["order-address"])}',
         ${parseInt(formData["order-address-number"], 10)},
         '${escapeString(formData["method-payment"])}',
-        ${decimalValue}
+        ${decimalValue},
+        '${escapeString(formData["order-date"])}',
+        '${escapeString(formData["order-neighbourhood"])}'
       );
       SELECT SCOPE_IDENTITY() AS order_id;
     `;
@@ -69,19 +71,21 @@ app.post("/venda-submit", async (req, res) => {
       if (productResult.recordset.length > 0) {
         const product = productResult.recordset[0];
         const insertItemQuery = `
-          INSERT INTO vendas (order_id, product_id, quantity, product_price)
-          VALUES (${orderId}, ${product.product_id}, ${item.quantity}, ${product.product_price});
+          INSERT INTO itens_vendas (order_id, product_id, quantity, product_price, product_name)
+          VALUES (${orderId}, ${product.product_id}, ${item.quantity}, ${
+          product.product_price
+        }, '${escapeString(item.product_name)}');
         `;
         await request.query(insertItemQuery);
       }
     }
 
-    res.send({ message: "Form data and items saved to SQL Server" });
+    res.send({ message: "Itens enviados para o SQL Server com sucesso!" });
   } catch (err) {
     console.error(err);
     res
       .status(500)
-      .send({ error: "An error occurred while saving data to SQL Server" });
+      .send({ error: "Houve um erro ao enviar os dados para o SQL Server." });
   }
 });
 
@@ -96,7 +100,6 @@ app.post("/add-product", async (req, res) => {
     const productSize = formData["product-size"]
       ? formData["product-size"]
       : null;
-
     const productPrice = parseFloat(formData["product-price"]);
 
     const query = `
@@ -115,12 +118,12 @@ app.post("/add-product", async (req, res) => {
     request.input("product_size", sql.NVarChar, productSize);
 
     await request.query(query);
-    res.send({ message: "Product data saved to SQL Server" });
+    res.send({ message: "Produto adicionado ao banco de dados com sucesso!" });
   } catch (err) {
     console.error(err);
     res
       .status(500)
-      .send({ error: "An error occurred while saving data to SQL Server" });
+      .send({ error: "Houve um erro ao enviar o produto para o SQL Server." });
   }
 });
 

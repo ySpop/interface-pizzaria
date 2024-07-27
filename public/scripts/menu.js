@@ -33,10 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Botão Apagar clicado");
   });
 
-  btnSendForm.addEventListener("click", (event) => {
-    event.preventDefault();
-    console.log("Botão Enviar clicado");
-  });
+  // btnSendForm.addEventListener("click", (event) => {
+  //   event.preventDefault();
+  //   console.log("Botão Enviar clicado");
+  // });
 
   btnDeleteItem.addEventListener("click", (event) => {
     event.preventDefault();
@@ -46,96 +46,29 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Botão Retroceder clicado");
   });
 
-  const vendaForm = document.getElementById("venda-form");
-
-  btnAddItem.addEventListener("click", (event) => {
-    event.preventDefault();
-    addItemToContainer();
-    initializeAutocomplete();
-  });
-
-  vendaForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    submitVendaForm();
-  });
-
   function addItemToContainer() {
-    const inputsItemsContainer = document.querySelector(".inputs-container-item");
-    const inputsItemQuantityContainer = document.querySelector(".inputs-container-quantity");
+    const inputsItemsContainer = document.querySelector(
+      ".inputs-container-item"
+    );
+    const inputsItemQuantityContainer = document.querySelector(
+      ".inputs-container-quantity"
+    );
 
     const itemInput = document.createElement("input");
     const itemInputQuantity = document.createElement("input");
 
     itemInput.setAttribute("placeholder", "Digite o item");
     itemInput.setAttribute("type", "text");
+    itemInput.setAttribute("name", "product-name");
     itemInput.classList.add("product-comanda-input");
 
     itemInputQuantity.setAttribute("placeholder", "Digite a quantidade");
     itemInputQuantity.setAttribute("type", "number");
+    itemInputQuantity.setAttribute("name", "quantity");
 
     inputsItemsContainer.appendChild(itemInput);
     inputsItemQuantityContainer.appendChild(itemInputQuantity);
   }
-
-  function initializeAutocomplete() {
-    const productInputs = document.querySelectorAll(".product-comanda-input");
-
-    // Fetch products from API
-    fetch("/api/products")
-      .then((response) => response.json())
-      .then((products) => {
-        const productNames = products.map((product) => product.product_name);
-        productInputs.forEach((input) => {
-          new Awesomplete(input, { list: productNames });
-        });
-      })
-      .catch((error) => {
-        console.error("Erro ao carregar produtos:", error);
-      });
-  }
-
-  function submitVendaForm() {
-    const formData = new FormData(vendaForm);
-    const items = [];
-    const itemInputs = document.querySelectorAll(".inputs-container-item input");
-    const quantityInputs = document.querySelectorAll(".inputs-container-quantity input");
-
-    itemInputs.forEach((itemInput, index) => {
-      const quantityInput = quantityInputs[index];
-      items.push({
-        product_name: itemInput.value,
-        quantity: parseInt(quantityInput.value, 10)
-      });
-    });
-
-    const vendaData = {
-      "order-time": formData.get("order-time"),
-      "order-address": formData.get("order-address"),
-      "order-address-number": formData.get("order-address-number"),
-      "method-payment": formData.get("method-payment"),
-      "cost-payment": formData.get("cost-payment"),
-      items: items
-    };
-
-    fetch("/venda-submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(vendaData)
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.message);
-        // Adicionar qualquer ação adicional após o sucesso
-      })
-      .catch((error) => {
-        console.error("Erro ao enviar a comanda:", error);
-      });
-  }
-
-  // Initialize autocomplete for existing inputs on page load
-  initializeAutocomplete();
 });
 
 function toggleModal() {
@@ -183,7 +116,7 @@ function toggleModal() {
     comandaContent.classList.add("active");
     body.style.overflow = "auto";
 
-    console.log(body);
+    console.log(comandaContent);
   });
 
   btnAddProductDB.addEventListener("click", () => {
