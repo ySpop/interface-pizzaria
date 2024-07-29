@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Hugo Domingos Pina" />
+    <link rel="stylesheet" href="/styles/login.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <title>Pizzaria Pina</title>
+  </head>
+  <body>
+    <header class="header">
+      <section class="header-content container-grid">
+        <h3 class="header-content-title">Pizzaria Pina</h3>
+
+        <div class="right-header-content">
+          <button class="btn-login">Login</button>
+          <button class="btn-home">Voltar para a home</button>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="login-container">
+        <div class="form-container">
+          <form
+            id="login-form"
+            class="login-form"
+            method="POST"
+            action="/login"
+          >
+            <h5>Preencha as informações para fazer login</h5>
+            <hr class="form-line" />
+            <div class="login-form-inputs">
+              <div class="input-group">
+                <input
+                  id="username-input"
+                  class="input"
+                  type="text"
+                  name="username"
+                  placeholder=" "
+                />
+                <label class="placeholder">Digite o usuário</label>
+              </div>
+              <div class="input-group">
+                <input
+                  id="password-input"
+                  class="input"
+                  type="password"
+                  name="password"
+                  placeholder=" "
+                />
+                <label class="placeholder">Digite a senha</label>
+              </div>
+            </div>
+
+            <div class="login-buttons-container">
+              <button class="login-send-btn login-btns">Entrar</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <section class="footer-content container-grid">Footer</section>
+    </footer>
+
+    <script>
+      document.querySelector(".btn-home").addEventListener("click", () => {
+        window.location.href = "/";
+      });
+    </script>
+  </body>
+</html>

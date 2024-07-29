@@ -33,11 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Botão Apagar clicado");
   });
 
-  // btnSendForm.addEventListener("click", (event) => {
-  //   event.preventDefault();
-  //   console.log("Botão Enviar clicado");
-  // });
-
   btnDeleteItem.addEventListener("click", (event) => {
     event.preventDefault();
 

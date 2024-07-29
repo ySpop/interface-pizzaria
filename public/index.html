@@ -24,8 +24,13 @@
     <header class="header">
       <section class="header-content container-grid">
         <h3 class="header-content-title">Pizzaria Pina</h3>
+        <h5 id="username-display"></h5>
 
-        <button class="btn-menu">Menu</button>
+        <div class="right-header-content">
+          <button class="btn-login">Login</button>
+          <button type="submit" class="btn-logout">Logout</button>
+          <button class="btn-menu">Menu</button>
+        </div>
       </section>
     </header>
 
@@ -81,7 +86,12 @@
                   />
                   <h5 class="comanda-order-date">Digite a data</h5>
                 </div>
-                <input class="input-order-date" type="text" name="order-date" maxlength="10"/>
+                <input
+                  class="input-order-date"
+                  type="text"
+                  name="order-date"
+                  maxlength="10"
+                />
               </div>
             </div>
 
@@ -167,7 +177,7 @@
 
             <div class="buttons-form">
               <button id="btn-delete-last-item">Retroceder item</button>
-              <button id="btn-reset-form" class="erase-button">Apagar</button>
+              <button id="btn-reset-form" class="erase-button btn-reset-form">Apagar</button>
               <button id="btn-send-form" class="send-button send-venda-form">
                 Enviar
               </button>
@@ -263,5 +273,50 @@
     <footer class="footer">
       <section class="footer-content container-grid">Footer</section>
     </footer>
+
+    <script>
+      document
+        .querySelector(".btn-login")
+        .addEventListener("click", function () {
+          window.location.href = "/login";
+        });
+
+      document
+        .querySelector(".btn-logout")
+        .addEventListener("click", function () {
+          fetch("/logout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          })
+            .then((response) => {
+              if (response.ok) {
+                window.location.href = "/login";
+              } else {
+                alert("Erro ao fazer logout. Tente novamente.");
+              }
+            })
+            .catch((error) => {
+              console.error("Erro ao fazer logout:", error);
+            });
+        });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/get-username")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById(
+              "username-display"
+            ).innerHTML = `<img src="/assets/icons/account_circle_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"> Seja bem vindo(a), <span>${data.username}</span>`;
+            document.querySelector(".btn-login").style.display = "none";
+            document.querySelector(".btn-logout").style.display = "block";
+          })
+          .catch((error) => {
+            console.error("Erro ao buscar o username:", error);
+          });
+      });
+    </script>
   </body>
 </html>

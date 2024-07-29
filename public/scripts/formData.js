@@ -80,6 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
         items: items,
       };
 
+      console.log(formData.get("order-date"));
+
       console.log("Venda Data:", vendaData);
 
       try {

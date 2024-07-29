@@ -1,7 +1,10 @@
 const express = require("express");
 const path = require("path");
 const sql = require("mssql");
+const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
+const moment = require("moment");
+const session = require("express-session");
 
 const app = express();
 const port = 3000;
@@ -23,8 +26,29 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(
+  session({
+    secret: "aAD@dk32Dkf%dsapizza",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
+
+app.get("/get-username", (req, res) => {
+  if (req.session.username) {
+    res.json({ username: req.session.username });
+  } else {
+    res.status(401).send("Usuário não autenticado");
+  }
+});
+
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  if (req.session.username) {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  } else {
+    res.redirect("/login");
+  }
 });
 
 function escapeString(str) {
@@ -34,6 +58,10 @@ function escapeString(str) {
 app.post("/venda-submit", async (req, res) => {
   const formData = req.body;
   console.log(formData);
+
+  const orderDate = moment(formData["order-date"], "DD/MM/YYYY").format(
+    "YYYY-MM-DD"
+  );
 
   try {
     await sql.connect(sqlConfig);
@@ -49,7 +77,7 @@ app.post("/venda-submit", async (req, res) => {
         ${parseInt(formData["order-address-number"], 10)},
         '${escapeString(formData["method-payment"])}',
         ${decimalValue},
-        '${escapeString(formData["order-date"])}',
+        '${orderDate}',
         '${escapeString(formData["order-neighbourhood"])}'
       );
       SELECT SCOPE_IDENTITY() AS order_id;
@@ -145,6 +173,47 @@ sql.connect(sqlConfig, (err) => {
       console.error("Erro ao buscar produtos:", err);
       res.status(500).json({ error: "Erro ao buscar produtos" });
     }
+  });
+});
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    await sql.connect(sqlConfig);
+    const request = new sql.Request();
+
+    const getUserQuery = `
+      SELECT * FROM users WHERE LOWER(username) = LOWER(@username);
+    `;
+
+    request.input("username", sql.NVarChar, username);
+
+    const result = await request.query(getUserQuery);
+    const user = result.recordset[0];
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      req.session.username = username;
+      res.redirect("/");
+    } else {
+      res.status(401).send("Credenciais inválidas");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao fazer login");
+  }
+});
+
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ error: "Erro ao fazer logout" });
+    }
+    res.redirect("/login");
   });
 });
 
