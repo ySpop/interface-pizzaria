@@ -1,0 +1,82 @@
+.fechamento-content {
+  width: 350px;
+  /* height: 300px; */
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  display: none;
+  visibility: hidden;
+  /* border: 2px solid red; */
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+
+.fechamento-top-container {
+  text-align: center;
+}
+
+h5 {
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+}
+
+.entry-top {
+  display: flex;
+  align-items: center;
+}
+
+.entry-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.out-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.out-top {
+  display: flex;
+  align-items: center;
+}
+
+.entry-inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.entry-input-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.entry-initial-container {
+  display: flex;
+  justify-self: left;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.entry-final-valor {
+  display: flex;
+  justify-self: left;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px; 
+}
+
+.out-inputs-container {
+  display: flex;
+  justify-self: left;
+  align-items: center;
+}

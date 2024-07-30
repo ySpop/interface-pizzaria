@@ -12,7 +12,7 @@ const port = 3000;
 // Configuração do SQL Server
 const sqlConfig = {
   user: "sa",
-  password: "@Bloodstrike11",
+  password: "281575je",
   database: "dbPP",
   server: "localhost",
   options: {
@@ -69,16 +69,32 @@ app.post("/venda-submit", async (req, res) => {
 
     const decimalValue = parseFloat(formData["cost-payment"]).toFixed(2);
 
+    const username = req.session.username
+      ? escapeString(req.session.username)
+      : "Anônimo";
+
+    const orderAddress = formData["order-address"]
+      ? `'${escapeString(formData["order-address"])}'`
+      : "NULL";
+    const orderAddressNumber = formData["order-address-number"]
+      ? parseInt(formData["order-address-number"], 10)
+      : "NULL";
+    const orderNeighbourhood = formData["order-neighbourhood"]
+      ? `'${escapeString(formData["order-neighbourhood"])}'`
+      : "NULL";
+
     const insertVendaQuery = `
-      INSERT INTO vendas (order_time, order_address, order_address_number, method_payment, cost_payment, order_date, order_neighbourhood)
+      INSERT INTO vendas (order_time, order_address, order_address_number, method_payment, cost_payment, order_date, order_neighbourhood, username, order_type)
       VALUES (
         '${escapeString(formData["order-time"])}',
-        '${escapeString(formData["order-address"])}',
-        ${parseInt(formData["order-address-number"], 10)},
+        ${orderAddress},
+        ${orderAddressNumber},
         '${escapeString(formData["method-payment"])}',
         ${decimalValue},
         '${orderDate}',
-        '${escapeString(formData["order-neighbourhood"])}'
+        ${orderNeighbourhood},
+        '${username}',
+        '${escapeString(formData["order-type"])}'
       );
       SELECT SCOPE_IDENTITY() AS order_id;
     `;

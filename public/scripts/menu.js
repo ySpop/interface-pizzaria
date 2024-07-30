@@ -4,11 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuOptionsContent = document.querySelector(".menu-opcoes-content");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
+  const fechamentoContent = document.querySelector(".fechamento-content");
 
   menuOptionsHolder.classList.remove("activeHolder");
   menuOptionsHolder.classList.remove("closeHolderTransition");
   comandaContent.classList.remove("active");
   addProductDBContent.classList.remove("active");
+  fechamentoContent.classList.remove("active");
   console.log(addProductDBContent);
   console.log(comandaContent);
 
@@ -73,8 +75,10 @@ function toggleModal() {
   const btnOptionsCloser = document.querySelector(".btn-close-menu");
   const btnComanda = document.querySelector(".btn-comanda");
   const btnAddProductDB = document.querySelector(".btn-newproductdb");
+  const btnFechamento = document.querySelector(".btn-fechamento");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
+  const fechamentoContent = document.querySelector(".fechamento-content");
   const body = document.querySelector(".body");
 
   function modalCloser() {
@@ -126,15 +130,29 @@ function toggleModal() {
     console.log(body);
   });
 
+  btnFechamento.addEventListener("click", () => {
+    modalCloser();
+    closeOtherOptions();
+
+    console.log("Executada!");
+
+    fechamentoContent.classList.add("active");
+    body.style.overflow = "auto";
+
+    console.log(body);
+  });
+
   console.log("Função toggleModal executada");
 }
 
 function closeOtherOptions() {
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
+  const fechamentoContent = document.querySelector(".fechamento-content");
 
   comandaContent.classList.remove("active");
   addProductDBContent.classList.remove("active");
+  fechamentoContent.classList.remove("active");
 }
 
 function addItemToContainer() {

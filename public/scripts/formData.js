@@ -2,6 +2,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const addProductForm = document.getElementById("add-product-form");
   const vendaForm = document.getElementById("venda-form");
   const btnAddItem = document.querySelector(".btn-add-item");
+  const toggleOrderTypeBtn = document.getElementById("toggle-order-type");
+  const orderTypeInput = document.getElementById("order-type");
+  const inputsAddress = document.querySelector(".comanda-address-container");
+  const inputAddress = document.querySelector(".input-address");
+  const inputAddressNumber = document.querySelector(".input-address-number");
+  const inputNeighbourhood = document.querySelector(".input-neighbourhood");
+
+  toggleOrderTypeBtn.addEventListener("click", function () {
+    if (orderTypeInput.value === "Entrega") {
+      orderTypeInput.value = "Balcão";
+      toggleOrderTypeBtn.innerText = "Balcão";
+
+      inputsAddress.style.display = "none";
+      inputNeighbourhood.style.display = "none";
+
+      const arrayInputs = [
+        inputAddress,
+        inputAddressNumber,
+        inputNeighbourhood,
+      ];
+      arrayInputs.forEach((input) => {
+        input.value = "";
+      });
+    } else {
+      orderTypeInput.value = "Entrega";
+      toggleOrderTypeBtn.innerText = "Entrega";
+
+      inputsAddress.style.display = "block";
+      inputNeighbourhood.style.display = "block";
+    }
+  });
 
   addProductForm.addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -33,16 +64,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function formatDateInput(event) {
     const input = event.target;
-    let value = input.value.replace(/\D/g, ''); 
+    let value = input.value.replace(/\D/g, "");
 
-    if (value.length > 2) value = value.slice(0, 2) + '/' + value.slice(2);
-    if (value.length > 5) value = value.slice(0, 5) + '/' + value.slice(5);
+    if (value.length > 2) value = value.slice(0, 2) + "/" + value.slice(2);
+    if (value.length > 5) value = value.slice(0, 5) + "/" + value.slice(5);
 
     input.value = value;
   }
 
-  const dateInput = document.querySelector('.input-order-date');
-  dateInput.addEventListener('input', formatDateInput);
+  const dateInput = document.querySelector(".input-order-date");
+  dateInput.addEventListener("input", formatDateInput);
 
   if (vendaForm) {
     console.log("vendaForm found");
@@ -76,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "method-payment": formData.get("method-payment"),
         "cost-payment": formData.get("cost-payment"),
         "order-date": formData.get("order-date"),
+        "order-type": formData.get("order-type"),
         "order-neighbourhood": formData.get("order-neighbourhood"),
         items: items,
       };

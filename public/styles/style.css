@@ -180,6 +180,8 @@ main {
   font-family: "Poppins", sans-serif;
   transition: transform 0.2s ease;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.15);
+  color: #fff;
+  background-color: #000000e1;
 }
 
 .menu-content-top {
@@ -202,10 +204,14 @@ main {
   transform: translateX(0) scale(1.1);
 }
 
-.btn-comanda {
+/* .btn-comanda {
   background-color: chocolate;
   color: #fff;
 }
+
+.btn-fechamento {
+  background-color: darkslategrey;
+} */
 
 .activeHolder {
   opacity: 1;
@@ -234,6 +240,11 @@ main {
 .erase-button {
   padding: 3px 10px 3px 10px;
   background-color: red;
+}
+
+.order-type-btn {
+  padding: 3px 10px 3px 10px;
+  background-color: orange;
 }
 
 .footer-content {

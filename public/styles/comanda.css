@@ -96,6 +96,7 @@ input {
   align-items: center;
   justify-content: left;
   gap: 5px;
+  margin-bottom: 5px;
   text-wrap: nowrap;
   /* border: 2px solid red; */
 }
@@ -104,13 +105,13 @@ input {
   display: flex;
   align-items: center;
   justify-content: left;
+  text-wrap: nowrap;
   gap: 5px;
 }
 
 .comanda-address-container {
   display: flex;
   flex-direction: column;
-  gap: 5px;
   margin-bottom: 20px;
 }
 
@@ -207,9 +208,10 @@ input {
 }
 
 .buttons-container {
-  border: 2px solid red;
-  display: flex;
-  justify-content: space-between;
+  width: 100%;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 #btn-delete-last-item {

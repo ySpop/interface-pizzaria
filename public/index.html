@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/styles/style.css" />
     <link rel="stylesheet" href="/styles/comanda.css" />
     <link rel="stylesheet" href="/styles/addproductdb.css" />
+    <link rel="stylesheet" href="/styles/fechamento.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.css"
@@ -48,6 +49,10 @@
             <div class="buttons-container">
               <button class="btn-comanda menu-buttons">
                 Adicionar comanda
+              </button>
+
+              <button class="btn-fechamento menu-buttons">
+                Fechamento de Caixa
               </button>
 
               <button class="btn-newproductdb menu-buttons">
@@ -176,8 +181,23 @@
             </div>
 
             <div class="buttons-form">
+              <button
+                class="order-type-btn"
+                type="button"
+                id="toggle-order-type"
+              >
+                Entrega
+              </button>
+              <input
+                type="hidden"
+                id="order-type"
+                name="order-type"
+                value="Entrega"
+              />
               <button id="btn-delete-last-item">Retroceder item</button>
-              <button id="btn-reset-form" class="erase-button btn-reset-form">Apagar</button>
+              <button id="btn-reset-form" class="erase-button btn-reset-form">
+                Apagar
+              </button>
               <button id="btn-send-form" class="send-button send-venda-form">
                 Enviar
               </button>
@@ -264,6 +284,98 @@
               <button id="send-addproduct-form" class="send-button">
                 Enviar
               </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="fechamento-content">
+          <form class="fechamento-form" id="fechamento-form">
+            <div class="fechamento-top-container">
+
+              <h5>Preencha TODAS as informações para efetuar o fechamento</h5>
+              <hr class="form-line">
+
+              <div class="entry-date">
+                <label class="label-data">Data do fechamento</label>
+                <input class="input-fechamento-date" type="text" name="input-fechamento-date">
+              </div>
+
+              <div class="entry-initial-container">
+                <label class="label-initial">Valor inicial</label>
+                <input
+                  class="input-initial-valor"
+                  type="number"
+                  name="initial-valor"
+                />
+              </div>
+
+              <div class="entry-final-valor">
+                <label class="label-final">Valor final</label>
+                <input
+                  class="input-final-valor"
+                  type="number"
+                  name="final-valor"
+                />
+              </div>
+
+              <div class="entry-container">
+                <div class="entry-top">
+                  <img
+                    src="/assets/icons/add_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  />
+                  <h5>Entrada</h5>
+                </div>
+
+                <div class="entry-inputs-container">
+                  <div class="entry-input-group">
+                    <label class="label-pix">PIX</label>
+                    <input class="input-pix" type="number" name="input-pix" />
+                  </div>
+
+                  <div class="entry-input-group">
+                    <label class="label-credito">Crédito</label>
+                    <input
+                      class="input-credito"
+                      type="number"
+                      name="input-credito"
+                    />
+                  </div>
+
+                  <div class="entry-input-group">
+                    <label class="label-debito">Débito</label>
+                    <input
+                      class="input-debito"
+                      type="number"
+                      name="input-debito"
+                    />
+                  </div>
+
+                  <div class="entry-input-group">
+                    <label class="label-dinheiro">Dinheiro</label>
+                    <input
+                      class="input-dinheiro"
+                      type="number"
+                      name="input-dinheiro"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="out-container">
+                <div class="out-top">
+                  <img
+                    src="/assets/icons/remove_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  />
+                  <h5>Saída</h5>
+                </div>
+
+                <div class="out-inputs-container">
+                  <div class="out-input-group">
+                    <label class="">Decréscimo</label>
+                    <input class="input-pix" type="number" name="input-pix" />
+                  </div>
+                </div>
+              </div>
             </div>
           </form>
         </section>
