@@ -192,6 +192,18 @@ sql.connect(sqlConfig, (err) => {
   });
 });
 
+app.get("/api/funcionarios", async (req, res) => {
+  try {
+    const result = await sql.query(
+      "SELECT funcionario_id, funcionario_name FROM funcionarios"
+    );
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Erro ao buscar funcionários:", err);
+    res.status(500).json({ error: "Erro ao buscar funcionários" });
+  }
+});
+
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });

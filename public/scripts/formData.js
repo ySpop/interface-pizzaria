@@ -74,6 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const dateInput = document.querySelector(".input-order-date");
   dateInput.addEventListener("input", formatDateInput);
+  const dateFuncionarioInput = document.querySelectorAll(
+    ".input-funcionario-data"
+  );
+  dateFuncionarioInput.forEach((input) => {
+    input.addEventListener("input", formatDateInput);
+  });
+  const dateFechamentoInput = document.querySelector(".input-fechamento-date");
+  dateFechamentoInput.addEventListener("input", formatDateInput);
 
   if (vendaForm) {
     console.log("vendaForm found");
@@ -162,4 +170,21 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Adicionado");
     initializeAutocomplete();
   });
+});
+
+document.querySelector(".btn-fechamento").addEventListener("click", () => {
+  fetch("/api/funcionarios")
+    .then((response) => response.json())
+    .then((data) => {
+      const selects = document.querySelectorAll(".funcionario-selector");
+      selects.forEach((select) => {
+        data.forEach((funcionario) => {
+          const option = document.createElement("option");
+          option.value = funcionario.funcionario_id;
+          option.textContent = funcionario.funcionario_name;
+          select.appendChild(option);
+        });
+      });
+    })
+    .catch((error) => console.error("Erro ao buscar funcionários:", error));
 });

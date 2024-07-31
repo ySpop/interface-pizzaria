@@ -1,34 +1,64 @@
+.fechamento-container-all {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  display: none;
+}
+
 .fechamento-content {
   width: 350px;
   /* height: 300px; */
   border-radius: 8px;
   background-color: #fff;
-  padding: 15px;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
-  opacity: 0;
-  display: none;
-  visibility: hidden;
+  /* border: 2px solid red; */
+}
+
+.pagamento-fun-content {
+  width: 350px;
+  /* height: 300px; */
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
   /* border: 2px solid red; */
 }
 
 .active {
   opacity: 1;
   visibility: visible;
-  display: block;
-}
-
-.fechamento-top-container {
-  text-align: center;
+  display: flex;
 }
 
 h5 {
-  font-size: 16px;
+  font-size: 18px;
   font-family: "Poppins", sans-serif;
+}
+
+.funcionarios-line {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.fechamento-top-text {
+  text-align: center;
+}
+
+.input-fechamento-date {
+  width: 100px;
+  text-align: center;
 }
 
 .entry-top {
   display: flex;
   align-items: center;
+}
+
+.entry-date {
+  display: flex;
+  align-items: center;
+  text-wrap: nowrap;
+  gap: 5px;
 }
 
 .entry-container {
@@ -72,11 +102,172 @@ h5 {
   justify-self: left;
   align-items: center;
   gap: 5px;
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 
 .out-inputs-container {
   display: flex;
   justify-self: left;
   align-items: center;
+}
+
+.funcionario-selector {
+  outline: none;
+  border: 1px solid orange;
+  border-radius: 4px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  padding: 5px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.15);
+}
+
+.funcionario-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+
+.funcionarios-group-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px; /* Define a altura máxima */
+  min-height: 400px;
+  overflow-y: auto; /* Permite a rolagem vertical */
+  background-color: #fff;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 15px;
+}
+
+.input-funcionario-data {
+  width: 100px;
+  text-align: center;
+}
+
+.input-funcionario-pagamento {
+  width: 80px;
+}
+
+.pagamento-bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  width: 100%;
+  height: 50px;
+  background-color: orange;
+  border-radius: 4px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+}
+
+.pagamento-bottom-btns {
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+  padding: 8px;
+  border-radius: 15px;
+  border: none;
+  font-family: "Poppins", sans-serif;
+  transition: transform 0.2s ease;
+  color: #fff;
+}
+
+.pagamento-bottom-send {
+  width: 40%;
+  background-color: black;
+}
+
+.pagamento-bottom-adicionar {
+  background-color: green;
+}
+
+.pagamento-bottom-btns:hover {
+  cursor: pointer;
+  transform: translateX(0) scale(1.1);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#pagamento-funcionarios-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Estilo do trilho da barra de rolagem (WebKit) */
+::-webkit-scrollbar-track {
+  background: orange; /* Cor de fundo do trilho */
+  border-radius: 10px;
+}
+
+/* Estilo do polegar da barra de rolagem (WebKit) */
+::-webkit-scrollbar-thumb {
+  background: orange; /* Cor do polegar */
+  border-radius: 10px;
+}
+
+/* Estilo do polegar ao passar o mouse sobre ele (WebKit) */
+::-webkit-scrollbar-thumb:hover {
+  background: orange; /* Cor do polegar ao passar o mouse */
+}
+
+/* Estilo básico para a barra de rolagem (Firefox) */
+.funcionarios-group-holder {
+  scrollbar-width: thin; /* Largura da barra de rolagem */
+  scrollbar-color: black orange; /* Cor do polegar e do trilho */
+  scroll-behavior: smooth;
+}
+
+.fechamento-bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  width: 100%;
+  height: 50px;
+  background-color: orange;
+  border-radius: 4px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+}
+
+.fechamento-groups-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px; /* Define a altura máxima */
+  min-height: 400px;
+  overflow-y: auto; /* Permite a rolagem vertical */
+  background-color: #fff;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 15px;
+}
+
+.fechamento-bottom-btns {
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+  padding: 8px;
+  border-radius: 15px;
+  border: none;
+  font-family: "Poppins", sans-serif;
+  transition: transform 0.2s ease;
+  color: #fff;
+}
+
+.fechamento-bottom-btns:hover {
+  cursor: pointer;
+  transform: translateX(0) scale(1.1);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fechamento-clear-btn {
+  background-color: red;
+}
+
+.fechamento-send-btn {
+  background-color: black;
 }

@@ -4,13 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuOptionsContent = document.querySelector(".menu-opcoes-content");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
-  const fechamentoContent = document.querySelector(".fechamento-content");
+  const fechamentoContainer = document.querySelector(".fechamento-container-all");
 
   menuOptionsHolder.classList.remove("activeHolder");
   menuOptionsHolder.classList.remove("closeHolderTransition");
   comandaContent.classList.remove("active");
   addProductDBContent.classList.remove("active");
-  fechamentoContent.classList.remove("active");
+  fechamentoContainer.classList.remove("active");
   console.log(addProductDBContent);
   console.log(comandaContent);
 
@@ -78,7 +78,7 @@ function toggleModal() {
   const btnFechamento = document.querySelector(".btn-fechamento");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
-  const fechamentoContent = document.querySelector(".fechamento-content");
+  const fechamentoContainer = document.querySelector(".fechamento-container-all");
   const body = document.querySelector(".body");
 
   function modalCloser() {
@@ -136,7 +136,7 @@ function toggleModal() {
 
     console.log("Executada!");
 
-    fechamentoContent.classList.add("active");
+    fechamentoContainer.classList.add("active")
     body.style.overflow = "auto";
 
     console.log(body);
@@ -148,11 +148,11 @@ function toggleModal() {
 function closeOtherOptions() {
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
-  const fechamentoContent = document.querySelector(".fechamento-content");
+  const fechamentoContainer = document.querySelector(".fechamento-container-all");
 
   comandaContent.classList.remove("active");
   addProductDBContent.classList.remove("active");
-  fechamentoContent.classList.remove("active");
+  fechamentoContainer.classList.remove("active")
 }
 
 function addItemToContainer() {
