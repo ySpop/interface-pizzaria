@@ -221,6 +221,12 @@ h5 {
   scroll-behavior: smooth;
 }
 
+.fechamento-groups-holder {
+  scrollbar-width: thin; /* Largura da barra de rolagem */
+  scrollbar-color: black orange; /* Cor do polegar e do trilho */
+  scroll-behavior: smooth;
+}
+
 .fechamento-bottom-container {
   display: flex;
   align-items: center;

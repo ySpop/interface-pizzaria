@@ -14,8 +14,8 @@
     />
     <title>Pizzaria Pina</title>
 
-    <script defer src="/scripts/menu.js"></script>
-    <script defer src="/scripts/formData.js"></script>
+    <script type="module" defer src="/scripts/menu.js"></script>
+    <script type="module" defer src="/scripts/formData.js"></script>
     <script
       defer
       src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.js"
@@ -301,29 +301,33 @@
                     <input
                       class="input-fechamento-date"
                       type="text"
-                      name="input-fechamento-date" 
+                      name="input-fechamento-date"
                       maxlength="10"
                     />
                   </div>
-  
+
                   <div class="entry-initial-container">
                     <label class="label-initial">Valor inicial</label>
                     <input
                       class="input-initial-valor"
                       type="number"
                       name="initial-valor"
+                      step="0.01"
+                      min="0"
                     />
                   </div>
-  
+
                   <div class="entry-final-valor">
                     <label class="label-final">Valor final</label>
                     <input
                       class="input-final-valor"
                       type="number"
                       name="final-valor"
+                      step="0.01"
+                      min="0"
                     />
                   </div>
-  
+
                   <div class="entry-container">
                     <div class="entry-top">
                       <img
@@ -331,42 +335,54 @@
                       />
                       <h5>Entrada</h5>
                     </div>
-  
+
                     <div class="entry-inputs-container">
                       <div class="entry-input-group">
                         <label class="label-pix">PIX</label>
-                        <input class="input-pix" type="number" name="input-pix" />
+                        <input
+                          class="input-pix"
+                          type="number"
+                          name="input-pix"
+                          step="0.01"
+                          min="0"
+                        />
                       </div>
-  
+
                       <div class="entry-input-group">
                         <label class="label-credito">Crédito</label>
                         <input
                           class="input-credito"
                           type="number"
                           name="input-credito"
+                          step="0.01"
+                          min="0"
                         />
                       </div>
-  
+
                       <div class="entry-input-group">
                         <label class="label-debito">Débito</label>
                         <input
                           class="input-debito"
                           type="number"
                           name="input-debito"
+                          step="0.01"
+                          min="0"
                         />
                       </div>
-  
+
                       <div class="entry-input-group">
                         <label class="label-dinheiro">Dinheiro</label>
                         <input
                           class="input-dinheiro"
                           type="number"
                           name="input-dinheiro"
+                          step="0.01"
+                          min="0"
                         />
                       </div>
                     </div>
                   </div>
-  
+
                   <div class="out-container">
                     <div class="out-top">
                       <img
@@ -374,11 +390,17 @@
                       />
                       <h5>Saída</h5>
                     </div>
-  
+
                     <div class="out-inputs-container">
                       <div class="out-input-group">
-                        <label class="">Decréscimo</label>
-                        <input class="input-pix" type="number" name="input-pix" />
+                        <label class="">Valor saída</label>
+                        <input
+                          class="input-pix"
+                          type="number"
+                          name="input-pix"
+                          step="0.01"
+                          min="0"
+                        />
                       </div>
                     </div>
                   </div>
@@ -386,71 +408,197 @@
               </section>
 
               <div class="fechamento-bottom-container">
-                <button class="fechamento-clear-btn fechamento-bottom-btns">Apagar</button>
-                <button class="fechamento-send-btn fechamento-bottom-btns">Enviar</button>
+                <button class="fechamento-clear-btn fechamento-bottom-btns">
+                  Apagar
+                </button>
+                <button class="fechamento-send-btn fechamento-bottom-btns">
+                  Enviar
+                </button>
               </div>
             </form>
           </section>
 
           <section class="pagamento-fun-content">
             <form id="pagamento-funcionarios-form">
-            <section class="funcionarios-group-holder">
-              <hr class="funcionarios-line">
-              <div class="funcionario-group">
-                <select class="funcionario-selector" name="funcionario-name" required></select>
-                <input class="input-funcionario-data" type="text" placeholder="Data" maxlength="10">
-                <input class="input-funcionario-pagamento" type="number" placeholder="Pagamento">
-                <input class="input-funcioario-descricao" type="text" placeholder="Descrição">
-              </div>
-              
-              <hr class="funcionarios-line">
-              <div class="funcionario-group">
-                <select class="funcionario-selector" name="funcionario-name" required></select>
-                <input class="input-funcionario-data" type="text" placeholder="Data" maxlength="10">
-                <input class="input-funcionario-pagamento" type="number" placeholder="Pagamento">
-                <input class="input-funcioario-descricao" type="text" placeholder="Descrição">
-              </div>
+              <section class="funcionarios-group-holder">
+                <hr class="funcionarios-line" />
+                <div class="funcionario-group">
+                  <select
+                    class="funcionario-selector"
+                    name="funcionario-id"
+                    required
+                  ></select>
+                  <input
+                    class="input-funcionario-data"
+                    type="text"
+                    placeholder="Data"
+                    maxlength="10"
+                  />
+                  <input
+                    class="input-funcionario-pagamento"
+                    type="number"
+                    placeholder="Pagamento"
+                    step="0.01"
+                    min="0"
+                  />
+                  <input
+                    class="input-funcioario-descricao"
+                    type="text"
+                    placeholder="Descrição"
+                  />
+                </div>
 
-              <hr class="funcionarios-line">
-              <div class="funcionario-group">
-                <select class="funcionario-selector" name="funcionario-name" required></select>
-                <input class="input-funcionario-data" type="text" placeholder="Data" maxlength="10">
-                <input class="input-funcionario-pagamento" type="number" placeholder="Pagamento">
-                <input class="input-funcioario-descricao" type="text" placeholder="Descrição">
-              </div>
+                <hr class="funcionarios-line" />
+                <div class="funcionario-group">
+                  <select
+                    class="funcionario-selector"
+                    name="funcionario-id"
+                    required
+                  ></select>
+                  <input
+                    class="input-funcionario-data"
+                    type="text"
+                    placeholder="Data"
+                    maxlength="10"
+                  />
+                  <input
+                    class="input-funcionario-pagamento"
+                    type="number"
+                    placeholder="Pagamento"
+                    step="0.01"
+                    min="0"
+                  />
+                  <input
+                    class="input-funcioario-descricao"
+                    type="text"
+                    placeholder="Descrição"
+                  />
+                </div>
 
-              <hr class="funcionarios-line">
-              <div class="funcionario-group">
-                <select class="funcionario-selector" name="funcionario-name" required></select>
-                <input class="input-funcionario-data" type="text" placeholder="Data" maxlength="10">
-                <input class="input-funcionario-pagamento" type="number" placeholder="Pagamento">
-                <input class="input-funcioario-descricao" type="text" placeholder="Descrição">
-              </div>
+                <hr class="funcionarios-line" />
+                <div class="funcionario-group">
+                  <select
+                    class="funcionario-selector"
+                    name="funcionario-id"
+                    required
+                  ></select>
+                  <input
+                    class="input-funcionario-data"
+                    type="text"
+                    placeholder="Data"
+                    maxlength="10"
+                  />
+                  <input
+                    class="input-funcionario-pagamento"
+                    type="number"
+                    placeholder="Pagamento"
+                    step="0.01"
+                    min="0"
+                  />
+                  <input
+                    class="input-funcioario-descricao"
+                    type="text"
+                    placeholder="Descrição"
+                  />
+                </div>
 
-              <hr class="funcionarios-line">
-              <div class="funcionario-group">
-                <select class="funcionario-selector" name="funcionario-name" required></select>
-                <input class="input-funcionario-data" type="text" placeholder="Data" maxlength="10">
-                <input class="input-funcionario-pagamento" type="number" placeholder="Pagamento">
-                <input class="input-funcioario-descricao" type="text" placeholder="Descrição">
-              </div>
+                <hr class="funcionarios-line" />
+                <div class="funcionario-group">
+                  <select
+                    class="funcionario-selector"
+                    name="funcionario-id"
+                    required
+                  ></select>
+                  <input
+                    class="input-funcionario-data"
+                    type="text"
+                    placeholder="Data"
+                    maxlength="10"
+                  />
+                  <input
+                    class="input-funcionario-pagamento"
+                    type="number"
+                    placeholder="Pagamento"
+                    step="0.01"
+                    min="0"
+                  />
+                  <input
+                    class="input-funcioario-descricao"
+                    type="text"
+                    placeholder="Descrição"
+                  />
+                </div>
 
-              <hr class="funcionarios-line">
-              <div class="funcionario-group">
-                <select class="funcionario-selector" name="funcionario-name" required></select>
-                <input class="input-funcionario-data" type="text" placeholder="Data" maxlength="10">
-                <input class="input-funcionario-pagamento" type="number" placeholder="Pagamento">
-                <input class="input-funcioario-descricao" type="text" placeholder="Descrição">
-              </div>
-              <hr class="funcionarios-line">
+                <hr class="funcionarios-line" />
+                <div class="funcionario-group">
+                  <select
+                    class="funcionario-selector"
+                    name="funcionario-id"
+                    required
+                  ></select>
+                  <input
+                    class="input-funcionario-data"
+                    type="text"
+                    placeholder="Data"
+                    maxlength="10"
+                  />
+                  <input
+                    class="input-funcionario-pagamento"
+                    type="number"
+                    placeholder="Pagamento"
+                    step="0.01"
+                    min="0"
+                  />
+                  <input
+                    class="input-funcioario-descricao"
+                    type="text"
+                    placeholder="Descrição"
+                  />
+                </div>
 
-            </section>
+                <hr class="funcionarios-line" />
+                <div class="funcionario-group">
+                  <select
+                    class="funcionario-selector"
+                    name="funcionario-id"
+                    required
+                  ></select>
+                  <input
+                    class="input-funcionario-data"
+                    type="text"
+                    placeholder="Data"
+                    maxlength="10"
+                  />
+                  <input
+                    class="input-funcionario-pagamento"
+                    type="number"
+                    placeholder="Pagamento"
+                    step="0.01"
+                    min="0"
+                  />
+                  <input
+                    class="input-funcioario-descricao"
+                    type="text"
+                    placeholder="Descrição"
+                  />
+                </div>
+              </section>
 
-            <section class="pagamento-bottom-container">
-              <button class="pagamento-bottom-adicionar pagamento-bottom-btns">Adicionar</button>
-              <button class="pagamento-bottom-send pagamento-bottom-btns">Enviar</button>
-            </section>
-          </form>
+              <section class="pagamento-bottom-container">
+                <button
+                  class="pagamento-bottom-adicionar pagamento-bottom-btns"
+                  type="button"
+                >
+                  Adicionar
+                </button>
+                <button
+                  class="pagamento-bottom-send pagamento-bottom-btns"
+                  id="pagamentoSendBtn"
+                >
+                  Enviar
+                </button>
+              </section>
+            </form>
           </section>
         </section>
       </section>

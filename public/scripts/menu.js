@@ -1,10 +1,14 @@
+import { formatDateInput } from '/scripts/formData.js';
+
 document.addEventListener("DOMContentLoaded", () => {
   const btnMenu = document.querySelector(".btn-menu");
   const menuOptionsHolder = document.querySelector(".menu-opcoes-holder");
   const menuOptionsContent = document.querySelector(".menu-opcoes-content");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
-  const fechamentoContainer = document.querySelector(".fechamento-container-all");
+  const fechamentoContainer = document.querySelector(
+    ".fechamento-container-all"
+  );
 
   menuOptionsHolder.classList.remove("activeHolder");
   menuOptionsHolder.classList.remove("closeHolderTransition");
@@ -19,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnAddItem = document.querySelector(".btn-add-item");
   const btnResetForm = document.querySelector(".btn-reset-form");
   const btnResetProductForm = document.querySelector(".btn-reset-product-form");
+  const btnFechamentoResetForm = document.querySelector(".fechamento-clear-btn");
   const btnSendForm = document.getElementById("btn-send-form");
   const btnDeleteItem = document.getElementById("btn-delete-last-item");
 
@@ -35,6 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Botão Apagar clicado");
   });
 
+  btnFechamentoResetForm.addEventListener("click", (event) => {
+    event.preventDefault()
+    resetModal()
+    console.log("Botão Apagar clicado");
+  });
+
   btnDeleteItem.addEventListener("click", (event) => {
     event.preventDefault();
 
@@ -42,6 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Botão Retroceder clicado");
   });
+
+  const addPaymentButton = document.querySelector(".pagamento-bottom-adicionar");
+  if (addPaymentButton) {
+    addPaymentButton.addEventListener("click", addItemFuncionarios);
+  } else {
+    console.log("Botão de adicionar pagamento não encontrado");
+  }
 
   function addItemToContainer() {
     const inputsItemsContainer = document.querySelector(
@@ -78,7 +96,9 @@ function toggleModal() {
   const btnFechamento = document.querySelector(".btn-fechamento");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
-  const fechamentoContainer = document.querySelector(".fechamento-container-all");
+  const fechamentoContainer = document.querySelector(
+    ".fechamento-container-all"
+  );
   const body = document.querySelector(".body");
 
   function modalCloser() {
@@ -136,7 +156,7 @@ function toggleModal() {
 
     console.log("Executada!");
 
-    fechamentoContainer.classList.add("active")
+    fechamentoContainer.classList.add("active");
     body.style.overflow = "auto";
 
     console.log(body);
@@ -148,11 +168,13 @@ function toggleModal() {
 function closeOtherOptions() {
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
-  const fechamentoContainer = document.querySelector(".fechamento-container-all");
+  const fechamentoContainer = document.querySelector(
+    ".fechamento-container-all"
+  );
 
   comandaContent.classList.remove("active");
   addProductDBContent.classList.remove("active");
-  fechamentoContainer.classList.remove("active")
+  fechamentoContainer.classList.remove("active");
 }
 
 function addItemToContainer() {
@@ -211,4 +233,47 @@ function resetModal() {
       inputsItemQuantityContainer.firstChild
     );
   }
+}
+
+function addItemFuncionarios(e) {
+  e.preventDefault();
+
+  const funcionariosHolder = document.querySelector(
+    ".funcionarios-group-holder"
+  );
+  const funcionariosLine = document.createElement("hr");
+  const funcionariosGroup = document.createElement("div");
+  const funcionarioSelector = document.createElement("select");
+  const inputData = document.createElement("input");
+  const inputPagamento = document.createElement("input");
+  const inputDescricao = document.createElement("input");
+
+  funcionariosHolder.appendChild(funcionariosLine);
+  funcionariosLine.classList.add("funcionarios-line");
+  funcionariosHolder.appendChild(funcionariosGroup);
+  funcionariosGroup.classList.add("funcionario-group");
+  funcionariosGroup.appendChild(funcionarioSelector);
+  funcionarioSelector.classList.add("funcionario-selector");
+  funcionariosGroup.appendChild(inputData);
+  inputData.classList.add("input-funcionario-data");
+  funcionariosGroup.appendChild(inputPagamento);
+  inputPagamento.classList.add("input-funcionario-pagamento");
+  funcionariosGroup.appendChild(inputDescricao);
+  inputDescricao.classList.add("input-funcioario-descricao");
+
+  funcionarioSelector.setAttribute("name", "funcionario-id");
+  funcionarioSelector.setAttribute("required", true);
+
+  inputData.setAttribute("type", "text");
+  inputData.setAttribute("placeholder", "Data");
+  inputData.setAttribute("maxlength", "10");
+  inputData.addEventListener("input", formatDateInput);
+
+  inputPagamento.setAttribute("type", "number");
+  inputPagamento.setAttribute("placeholder", "Pagamento");
+  inputPagamento.setAttribute("step", 0.01);
+  inputPagamento.setAttribute("min", 0)
+
+  inputDescricao.setAttribute("type", "text");
+  inputDescricao.setAttribute("placeholder", "Descrição");
 }

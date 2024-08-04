@@ -35,6 +35,15 @@ app.use(
   })
 );
 
+sql.connect(sqlConfig, (err) => {
+  if (err) {
+    console.error("Erro ao conectar ao banco de dados:", err);
+    return;
+  }
+
+  console.log("Conectado ao banco de dados");
+});
+
 app.get("/get-username", (req, res) => {
   if (req.session.username) {
     res.json({ username: req.session.username });
@@ -171,25 +180,106 @@ app.post("/add-product", async (req, res) => {
   }
 });
 
-sql.connect(sqlConfig, (err) => {
-  if (err) {
-    console.error("Erro ao conectar ao banco de dados:", err);
-    return;
-  }
+app.post("/add-payment", async (req, res) => {
+  const formData = req.body;
+  console.log(formData);
 
-  console.log("Conectado ao banco de dados");
+  try {
+    await sql.connect(sqlConfig);
+    const request = new sql.Request();
 
-  app.get("/api/products", async (req, res) => {
-    try {
-      const result = await sql.query(
-        "SELECT product_id, product_name FROM produtos"
-      );
-      res.json(result.recordset);
-    } catch (err) {
-      console.error("Erro ao buscar produtos:", err);
-      res.status(500).json({ error: "Erro ao buscar produtos" });
+    const username = req.session.username
+      ? escapeString(req.session.username)
+      : "Anônimo";
+
+    for (let i = 0; i < formData.items.length; i++) {
+      const item = formData.items[i];
+      const paymentDate = moment(item.data, "DD/MM/YYYY").format("YYYY-MM-DD");
+
+      const funcionarioID = parseInt(item.funcionarioID, 10);
+      const pagamento = parseFloat(item.pagamento).toFixed(2);
+      const descricao = escapeString(item.descricao);
+
+      const query = `
+        INSERT INTO pagamentos_funcionarios (funcionario_id, payment_date, payment_amount, description, username)
+        VALUES (
+          ${funcionarioID},
+          '${paymentDate}',
+          ${pagamento},
+          '${descricao}',
+          '${username}'
+        )
+      `;
+
+      await request.query(query);
     }
-  });
+
+    res.send({
+      message: "Pagamentos adicionados ao banco de dados com sucesso!",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      error: "Houve um erro ao enviar os dados para o SQL Server.",
+    });
+  }
+});
+
+app.post("/fechamento-submit", async (req, res) => {
+  const formData = req.body;
+  console.log(formData);
+
+  const fechamentoDate = moment(
+    formData["fechamentoDate"],
+    "DD/MM/YYYY"
+  ).format("YYYY-MM-DD");
+
+  const formatValue = (value) => {
+    const num = parseFloat(value);
+    return isNaN(num) ? 0.0 : num.toFixed(2);
+  };
+
+  try {
+    await sql.connect(sqlConfig);
+    const request = new sql.Request();
+
+    const username = req.session.username
+      ? escapeString(req.session.username)
+      : "Anônimo";
+
+    const initialValue = formatValue(formData["initialValue"]);
+    const finalValue = formatValue(formData["finalValue"]);
+    const pix = formatValue(formData["pix"]);
+    const credit = formatValue(formData["credit"]);
+    const debit = formatValue(formData["debit"]);
+    const cash = formatValue(formData["cash"]);
+    const outputValue = formatValue(formData["outputValue"]);
+
+    const query = `
+      INSERT INTO fechamento (fechamento_date, initial_value, final_value, pix, credit, debit, cash, output_value, username)
+      VALUES (
+        '${fechamentoDate}',
+        ${initialValue},
+        ${finalValue},
+        ${pix},
+        ${credit},
+        ${debit},
+        ${cash},
+        ${outputValue},
+        '${username}'
+      )
+    `;
+
+    await request.query(query);
+    res.send({
+      message: "Dados de fechamento adicionados ao banco de dados com sucesso!",
+    });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .send({ error: "Houve um erro ao enviar os dados para o SQL Server." });
+  }
 });
 
 app.get("/api/funcionarios", async (req, res) => {
@@ -201,6 +291,18 @@ app.get("/api/funcionarios", async (req, res) => {
   } catch (err) {
     console.error("Erro ao buscar funcionários:", err);
     res.status(500).json({ error: "Erro ao buscar funcionários" });
+  }
+});
+
+app.get("/api/products", async (req, res) => {
+  try {
+    const result = await sql.query(
+      "SELECT product_id, product_name FROM produtos"
+    );
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Erro ao buscar produtos:", err);
+    res.status(500).json({ error: "Erro ao buscar produtos" });
   }
 });
 
