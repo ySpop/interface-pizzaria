@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const moment = require("moment");
 const session = require("express-session");
+const { log } = require("console");
 
 const app = express();
 const port = 3000;
@@ -305,6 +306,36 @@ app.get("/api/products", async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar produtos" });
   }
 });
+
+app.get('/api/tabela', async (req, res) => {
+  try {
+    console.log('Rota /api/tabela chamada');
+
+    const result = await sql.query(`
+      SELECT 
+          pf.pagamento_id,
+          pf.funcionario_id,
+          f.funcionario_name AS funcionario_name,
+          pf.payment_date,
+          pf.payment_amount,
+          pf.description,
+          pf.username
+      FROM 
+          pagamentos_funcionarios pf
+      JOIN 
+          funcionarios f 
+      ON 
+          pf.funcionario_id = f.funcionario_id;
+    `);
+
+    console.log('Dados recebidos do banco de dados:', result.recordset);
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Erro ao buscar tabela pagamentos:", err);
+    res.status(500).send({ message: err.message });
+  }
+});
+
 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));

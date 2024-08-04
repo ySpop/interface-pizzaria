@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/styles/comanda.css" />
     <link rel="stylesheet" href="/styles/addproductdb.css" />
     <link rel="stylesheet" href="/styles/fechamento.css" />
+    <link rel="stylesheet" href="/styles/tablePagamentos.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.css"
@@ -66,6 +67,8 @@
               <button class="btn-editproductdb menu-buttons">
                 Alterar produto do DB
               </button>
+
+              <button class="btn-payments menu-buttons">Ver pagamentos</button>
             </div>
           </section>
         </section>
@@ -601,6 +604,26 @@
             </form>
           </section>
         </section>
+
+        <section class="tabela-pagamentos-content">
+          <table id="pagamentos-table" class="pagamentos-table">
+            <thead>
+              <tr>
+                <!-- Adicione os cabeçalhos das colunas aqui -->
+                <th>Pagamento ID</th>
+                <th>Nome funcionário</th>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Descrição</th>
+                <th>Usuário</th>
+              </tr>
+            </thead>
+
+            <tbody id="tbody-pagamentos-table">
+              <!-- As linhas da tabela serão adicionadas dinamicamente -->
+            </tbody>
+          </table>
+        </section>
       </section>
     </main>
 
@@ -608,7 +631,9 @@
       <section class="footer-content container-grid">Footer</section>
     </footer>
 
-    <script>
+    <script type="module">
+      import { formatDateString } from "/scripts/formData.js";
+
       document
         .querySelector(".btn-login")
         .addEventListener("click", function () {
@@ -649,6 +674,30 @@
           })
           .catch((error) => {
             console.error("Erro ao buscar o username:", error);
+          });
+
+        document
+          .querySelector(".btn-payments")
+          .addEventListener("click", () => {
+            fetch("/api/tabela")
+              .then((response) => response.json())
+              .then((data) => {
+                const tabela = document.getElementById(
+                  "tbody-pagamentos-table"
+                );
+                console.log(data);
+
+                data.forEach((item) => {
+                  const row = tabela.insertRow();
+                  row.insertCell(0).textContent = item.pagamento_id;
+                  row.insertCell(1).textContent = item.funcionario_name;
+                  row.insertCell(2).textContent = formatDateString(item.payment_date);
+                  row.insertCell(3).textContent = item.payment_amount;
+                  row.insertCell(4).textContent = item.description;
+                  row.insertCell(5).textContent = item.username;
+                });
+              })
+              .catch((error) => console.error("Erro ao buscar dados:", error));
           });
       });
     </script>

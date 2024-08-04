@@ -9,14 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const fechamentoContainer = document.querySelector(
     ".fechamento-container-all"
   );
+  const paymentsTableContent = document.querySelector(".tabela-pagamentos-content");
 
   menuOptionsHolder.classList.remove("activeHolder");
   menuOptionsHolder.classList.remove("closeHolderTransition");
   comandaContent.classList.remove("active");
   addProductDBContent.classList.remove("active");
   fechamentoContainer.classList.remove("active");
-  console.log(addProductDBContent);
-  console.log(comandaContent);
+  paymentsTableContent.classList.remove("active");
 
   toggleModal();
 
@@ -94,11 +94,13 @@ function toggleModal() {
   const btnComanda = document.querySelector(".btn-comanda");
   const btnAddProductDB = document.querySelector(".btn-newproductdb");
   const btnFechamento = document.querySelector(".btn-fechamento");
+  const btnPayments = document.querySelector(".btn-payments");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
   const fechamentoContainer = document.querySelector(
     ".fechamento-container-all"
   );
+  const paymentsTableContent = document.querySelector(".tabela-pagamentos-content");
   const body = document.querySelector(".body");
 
   function modalCloser() {
@@ -162,6 +164,19 @@ function toggleModal() {
     console.log(body);
   });
 
+  btnPayments.addEventListener("click", () => {
+    modalCloser();
+    closeOtherOptions();
+
+    console.log("Executada!");
+
+    paymentsTableContent.classList.add("active");
+    body.style.overflow = "auto";
+    
+    console.log(body);
+    
+  });
+
   console.log("Função toggleModal executada");
 }
 
@@ -171,10 +186,12 @@ function closeOtherOptions() {
   const fechamentoContainer = document.querySelector(
     ".fechamento-container-all"
   );
+  const paymentsTableContent = document.querySelector(".tabela-pagamentos-content");
 
   comandaContent.classList.remove("active");
   addProductDBContent.classList.remove("active");
-  fechamentoContainer.classList.remove("active");
+  fechamentoContainer.classList.remove("active")
+  paymentsTableContent.classList.remove("active");
 }
 
 function addItemToContainer() {
