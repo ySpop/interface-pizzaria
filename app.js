@@ -200,14 +200,16 @@ app.post("/add-payment", async (req, res) => {
       const funcionarioID = parseInt(item.funcionarioID, 10);
       const pagamento = parseFloat(item.pagamento).toFixed(2);
       const descricao = escapeString(item.descricao);
+      const account = escapeString(item.account);
 
       const query = `
-        INSERT INTO pagamentos_funcionarios (funcionario_id, payment_date, payment_amount, description, username)
+        INSERT INTO pagamentos_funcionarios (funcionario_id, payment_date, payment_amount, description, account, username)
         VALUES (
           ${funcionarioID},
           '${paymentDate}',
           ${pagamento},
           '${descricao}',
+          '${account}',
           '${username}'
         )
       `;
@@ -306,6 +308,27 @@ app.post("/addaccount-submit", async (req, res) => {
   }
 });
 
+app.delete("/delete-payment/:id", async (req, res) => {
+  const pagamentoId = req.params.id;
+
+  try {
+    await sql.connect(sqlConfig);
+    const request = new sql.Request();
+
+    const query = `DELETE FROM pagamentos_funcionarios WHERE pagamento_id = ${pagamentoId}`;
+    await request.query(query);
+
+    res.send({
+      message: "Pagamento deletado com sucesso!",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      error: "Houve um erro ao deletar o pagamento.",
+    });
+  }
+});
+
 app.get("/api/funcionarios", async (req, res) => {
   try {
     const result = await sql.query(
@@ -358,7 +381,7 @@ app.get("/api/tabela", async (req, res) => {
           pf.pagamento_id,
           pf.funcionario_id,
           f.funcionario_name AS funcionario_name,
-          fa.funcionario_account AS funcionario_account,
+          pf.account,
           pf.payment_date,
           pf.payment_amount,
           pf.description,
@@ -368,11 +391,7 @@ app.get("/api/tabela", async (req, res) => {
       JOIN 
           funcionarios f 
       ON 
-          pf.funcionario_id = f.funcionario_id
-      LEFT JOIN 
-          funcionarios_accounts fa
-      ON 
-          pf.funcionario_id = fa.funcionario_id;
+          pf.funcionario_id = f.funcionario_id;
     `);
 
     console.log("Dados recebidos do banco de dados:", result.recordset);

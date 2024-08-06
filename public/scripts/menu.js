@@ -1,4 +1,5 @@
 import { formatDateInput } from "/scripts/formData.js";
+import { getFuncionariosNames } from "/scripts/formData.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const btnMenu = document.querySelector(".btn-menu");
@@ -295,6 +296,11 @@ function addItemFuncionarios(e) {
   const inputPagamento = document.createElement("input");
   const inputDescricao = document.createElement("input");
   const deleteItemIcon = document.createElement("img");
+  const selectAccountFuncionario = document.createElement("select");
+
+  selectAccountFuncionario.classList.add("funcionario-account-selector");
+  selectAccountFuncionario.setAttribute("name", "funcionario-account");
+  selectAccountFuncionario.setAttribute("required", true);
 
   deleteItemIcon.classList.add("trash-pagamento-icon");
   deleteItemIcon.src =
@@ -313,6 +319,7 @@ function addItemFuncionarios(e) {
   inputPagamento.classList.add("input-funcionario-pagamento");
   funcionariosGroup.appendChild(inputDescricao);
   inputDescricao.classList.add("input-funcioario-descricao");
+  funcionariosGroup.appendChild(selectAccountFuncionario);
 
   funcionarioSelector.setAttribute("name", "funcionario-id");
   funcionarioSelector.setAttribute("required", true);

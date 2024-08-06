@@ -26,6 +26,7 @@
 .pagamentos-table {
   width: 100%;
   border-collapse: collapse;
+  /* user-select: none; */
 }
 
 .pagamentos-table th,
@@ -78,4 +79,25 @@
   font-size: 18px;
   color: #888;
   width: 100%;
+}
+
+.table-delete-btn {
+  border: none;
+  border-radius: 15px;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  transition: transform 0.2s ease;
+  background-color: red;
+}
+
+.tabela-pagamentos-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid red;
+  /* user-select: auto; */
+}
+
+.pagamentos-delete-btn:hover {
+  cursor: pointer;
 }

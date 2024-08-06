@@ -165,14 +165,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const descricao = group.querySelector(
         ".input-funcioario-descricao"
       ).value;
+      const account = group.querySelector(
+        ".funcionario-account-selector"
+      ).value;
 
-      if (funcionarioID && data && pagamento) {
+      if (funcionarioID && data && pagamento && account) {
         items.push({
           funcionarioID: funcionarioID,
           funcionarioName: funcionarioName,
           data: data,
           pagamento: pagamento,
           descricao: descricao,
+          account: account,
         });
       }
     });
@@ -291,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function getFuncionariosNames(selectClass) {
+export function getFuncionariosNames(selectClass) {
   fetch("/api/funcionarios")
     .then((response) => response.json())
     .then((data) => {
