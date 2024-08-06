@@ -1,0 +1,69 @@
+.addaccount-content {
+  /* height: 300px; */
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+
+.addaccount-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.addacc-selector-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.addaccount-funcionario {
+  outline: none;
+  border: 1px solid orange;
+  border-radius: 4px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  padding: 5px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.15);
+}
+
+.addacc-input-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.addaccount-bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.btn-send-addacc {
+  width: 120px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+  padding: 8px;
+  border-radius: 15px;
+  border: none;
+  font-family: "Poppins", sans-serif;
+  transition: transform 0.2s ease;
+  color: #fff;
+  background-color: #000;
+}
+
+.btn-send-addacc:hover {
+  cursor: pointer;
+  transform: translateX(0) scale(1.1);
+}

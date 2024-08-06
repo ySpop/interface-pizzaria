@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/styles/comanda.css" />
     <link rel="stylesheet" href="/styles/addproductdb.css" />
     <link rel="stylesheet" href="/styles/fechamento.css" />
+    <link rel="stylesheet" href="/styles/addaccount.css" />
     <link rel="stylesheet" href="/styles/tablePagamentos.css" />
     <link
       rel="stylesheet"
@@ -68,7 +69,13 @@
                 Alterar produto do DB
               </button>
 
-              <button class="btn-payments menu-buttons">Ver pagamentos</button>
+              <button class="btn-payments menu-buttons">
+                Tabela de pagamentos
+              </button>
+
+              <button class="btn-addaccount menu-buttons">
+                Adicionar conta
+              </button>
             </div>
           </section>
         </section>
@@ -424,8 +431,13 @@
           <section class="pagamento-fun-content">
             <form id="pagamento-funcionarios-form">
               <section class="funcionarios-group-holder">
-                <hr class="funcionarios-line" />
                 <div class="funcionario-group">
+                  <hr class="funcionarios-line" />
+                  <img
+                    class="trash-pagamento-icon"
+                    src="/assets/icons/delete_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  />
+
                   <select
                     class="funcionario-selector"
                     name="funcionario-id"
@@ -449,10 +461,20 @@
                     type="text"
                     placeholder="Descrição"
                   />
+                  <select
+                    class="funcionario-account-selector"
+                    name="funcionario-account"
+                    required
+                  ></select>
                 </div>
 
-                <hr class="funcionarios-line" />
                 <div class="funcionario-group">
+                  <hr class="funcionarios-line" />
+                  <img
+                    class="trash-pagamento-icon"
+                    src="/assets/icons/delete_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  />
+
                   <select
                     class="funcionario-selector"
                     name="funcionario-id"
@@ -476,10 +498,20 @@
                     type="text"
                     placeholder="Descrição"
                   />
+                  <select
+                    class="funcionario-account-selector"
+                    name="funcionario-account"
+                    required
+                  ></select>
                 </div>
 
-                <hr class="funcionarios-line" />
                 <div class="funcionario-group">
+                  <hr class="funcionarios-line" />
+                  <img
+                    class="trash-pagamento-icon"
+                    src="/assets/icons/delete_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  />
+
                   <select
                     class="funcionario-selector"
                     name="funcionario-id"
@@ -503,10 +535,20 @@
                     type="text"
                     placeholder="Descrição"
                   />
+                  <select
+                    class="funcionario-account-selector"
+                    name="funcionario-account"
+                    required
+                  ></select>
                 </div>
 
-                <hr class="funcionarios-line" />
                 <div class="funcionario-group">
+                  <hr class="funcionarios-line" />
+                  <img
+                    class="trash-pagamento-icon"
+                    src="/assets/icons/delete_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  />
+
                   <select
                     class="funcionario-selector"
                     name="funcionario-id"
@@ -530,10 +572,20 @@
                     type="text"
                     placeholder="Descrição"
                   />
+                  <select
+                    class="funcionario-account-selector"
+                    name="funcionario-account"
+                    required
+                  ></select>
                 </div>
 
-                <hr class="funcionarios-line" />
                 <div class="funcionario-group">
+                  <hr class="funcionarios-line" />
+                  <img
+                    class="trash-pagamento-icon"
+                    src="/assets/icons/delete_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  />
+
                   <select
                     class="funcionario-selector"
                     name="funcionario-id"
@@ -557,10 +609,20 @@
                     type="text"
                     placeholder="Descrição"
                   />
+                  <select
+                    class="funcionario-account-selector"
+                    name="funcionario-account"
+                    required
+                  ></select>
                 </div>
 
-                <hr class="funcionarios-line" />
                 <div class="funcionario-group">
+                  <hr class="funcionarios-line" />
+                  <img
+                    class="trash-pagamento-icon"
+                    src="/assets/icons/delete_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  />
+
                   <select
                     class="funcionario-selector"
                     name="funcionario-id"
@@ -584,6 +646,11 @@
                     type="text"
                     placeholder="Descrição"
                   />
+                  <select
+                    class="funcionario-account-selector"
+                    name="funcionario-account"
+                    required
+                  ></select>
                 </div>
               </section>
 
@@ -606,23 +673,64 @@
         </section>
 
         <section class="tabela-pagamentos-content">
-          <table id="pagamentos-table" class="pagamentos-table">
-            <thead>
-              <tr>
-                <!-- Adicione os cabeçalhos das colunas aqui -->
-                <th>Pagamento ID</th>
-                <th>Nome funcionário</th>
-                <th>Data</th>
-                <th>Valor</th>
-                <th>Descrição</th>
-                <th>Usuário</th>
-              </tr>
-            </thead>
+          <input
+            type="text"
+            id="search-bar"
+            placeholder="Pesquisar pagamentos..."
+          />
 
-            <tbody id="tbody-pagamentos-table">
-              <!-- As linhas da tabela serão adicionadas dinamicamente -->
-            </tbody>
-          </table>
+          <section class="tabela-holder">
+            <table id="pagamentos-table" class="pagamentos-table">
+              <thead>
+                <tr>
+                  <!-- Adicione os cabeçalhos das colunas aqui -->
+                  <th class="payment-cell">Pagamento ID</th>
+                  <th>Nome</th>
+                  <th>Data</th>
+                  <th>Valor</th>
+                  <th>Descrição</th>
+                  <th>Conta</th>
+                  <th>Usuário</th>
+                </tr>
+              </thead>
+
+              <tbody id="tbody-pagamentos-table"></tbody>
+            </table>
+            <div id="no-results-message" class="no-results-message">
+              Nenhum resultado encontrado.
+            </div>
+          </section>
+        </section>
+
+        <section class="addaccount-content">
+          <form id="addaccount-form" class="addaccount-form">
+            <div class="addaccount-holder">
+              <div class="addacc-selector-holder">
+                <h5>Selecione o funcionário</h5>
+
+                <select
+                  class="addaccount-funcionario"
+                  name="addaccount-funcionario-selector"
+                  required
+                ></select>
+              </div>
+
+              <div class="addacc-input-holder">
+                <h5>Digite a conta</h5>
+
+                <input
+                  type="text"
+                  class="addaccount-funcionario-account"
+                  name="addaccount-account"
+                  required
+                />
+              </div>
+
+              <div class="addaccount-bottom-container">
+                <button class="btn-send-addacc">Enviar</button>
+              </div>
+            </div>
+          </form>
         </section>
       </section>
     </main>
@@ -633,6 +741,8 @@
 
     <script type="module">
       import { formatDateString } from "/scripts/formData.js";
+      import { paymentsSearchBar } from "/scripts/menu.js";
+      import { addDeleteEventListeners } from "/scripts/menu.js";
 
       document
         .querySelector(".btn-login")
@@ -679,26 +789,68 @@
         document
           .querySelector(".btn-payments")
           .addEventListener("click", () => {
-            fetch("/api/tabela")
-              .then((response) => response.json())
-              .then((data) => {
-                const tabela = document.getElementById(
-                  "tbody-pagamentos-table"
-                );
-                console.log(data);
+            const tabela = document.getElementById("tbody-pagamentos-table");
 
-                data.forEach((item) => {
-                  const row = tabela.insertRow();
-                  row.insertCell(0).textContent = item.pagamento_id;
-                  row.insertCell(1).textContent = item.funcionario_name;
-                  row.insertCell(2).textContent = formatDateString(item.payment_date);
-                  row.insertCell(3).textContent = item.payment_amount;
-                  row.insertCell(4).textContent = item.description;
-                  row.insertCell(5).textContent = item.username;
-                });
-              })
-              .catch((error) => console.error("Erro ao buscar dados:", error));
+            if (tabela.rows.length === 0) {
+              fetch("/api/tabela")
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log(data);
+
+                  data.forEach((item) => {
+                    const row = tabela.insertRow();
+                    row.insertCell(0).textContent = item.pagamento_id;
+                    row.insertCell(1).textContent = item.funcionario_name;
+                    row.insertCell(2).textContent = formatDateString(
+                      item.payment_date
+                    );
+                    row.insertCell(3).textContent = item.payment_amount;
+                    row.insertCell(4).textContent = item.description;
+                    row.insertCell(5).textContent = item.funcionario_account;
+                    row.insertCell(6).textContent = item.username;
+                  });
+                })
+                .catch((error) =>
+                  console.error("Erro ao buscar dados:", error)
+                );
+            }
           });
+
+        const funcionarioGroups =
+          document.querySelectorAll(".funcionario-group");
+
+        funcionarioGroups.forEach((group) => {
+          const funcionarioSelector = group.querySelector(
+            ".funcionario-selector"
+          );
+          const accountSelector = group.querySelector(
+            ".funcionario-account-selector"
+          );
+
+          funcionarioSelector.addEventListener("change", () => {
+            const funcionarioId = funcionarioSelector.value;
+            updateAccountSelector(accountSelector, funcionarioId);
+          });
+        });
+
+        function updateAccountSelector(accountSelector, funcionarioId) {
+          accountSelector.innerHTML = "";
+
+          fetch(`/api/accounts?funcionario_id=${funcionarioId}`)
+            .then((response) => response.json())
+            .then((data) => {
+              data.forEach((account) => {
+                const option = document.createElement("option");
+                option.value = account.funcionario_account;
+                option.textContent = account.funcionario_account;
+                accountSelector.appendChild(option);
+              });
+            })
+            .catch((error) => console.error("Erro ao buscar contas:", error));
+        }
+
+        paymentsSearchBar();
+        addDeleteEventListeners();
       });
     </script>
   </body>

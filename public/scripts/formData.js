@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "pagamento-funcionarios-form"
   );
   const fechamentoForm = document.getElementById("fechamento-form");
+  const addAccountForm = document.getElementById("addaccount-form");
 
   const btnPagamentoSendForm = document.getElementById("pagamentoSendBtn");
   const btnAddItem = document.querySelector(".btn-add-item");
@@ -236,6 +237,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  addAccountForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const data = {
+      funcionarioId: document.querySelector(".addaccount-funcionario").value,
+      funcionarioAccount: document.querySelector(
+        ".addaccount-funcionario-account"
+      ).value,
+    };
+
+    try {
+      const response = await fetch("/addaccount-submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error("Erro ao enviar dados:", error);
+      alert("Erro ao enviar dados para o servidor.");
+    }
+  });
+
   function initializeAutocomplete() {
     const productInputs = document.querySelectorAll(".product-comanda-input");
 
@@ -259,11 +291,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function getFuncionariosNames() {
+function getFuncionariosNames(selectClass) {
   fetch("/api/funcionarios")
     .then((response) => response.json())
     .then((data) => {
-      const selects = document.querySelectorAll(".funcionario-selector");
+      const selects = document.querySelectorAll(`.${selectClass}`);
       selects.forEach((select) => {
         if (select.options.length === 0) {
           data.forEach((funcionario) => {
@@ -279,8 +311,36 @@ function getFuncionariosNames() {
     .catch((error) => console.error("Erro ao buscar funcionários:", error));
 }
 
+function getFuncionariosAccounts() {
+  fetch("/api/funcionarios_accounts")
+    .then((response) => response.json())
+    .then((data) => {
+      const selects = document.querySelectorAll(
+        ".funcionario-account-selector"
+      );
+      selects.forEach((select) => {
+        if (select.options.length === 0) {
+          data.forEach((funcionario) => {
+            const option = document.createElement("option");
+            option.value = funcionario.funcionario_account;
+            option.textContent = funcionario.funcionario_account;
+            option.dataset.name = funcionario.funcionario_account;
+            select.appendChild(option);
+          });
+        }
+      });
+    })
+    .catch((error) =>
+      console.error("Erro ao buscar contas dos funcionários:", error)
+    );
+}
+
 document.querySelector(".btn-fechamento").addEventListener("click", () => {
-  getFuncionariosNames();
+  getFuncionariosNames("funcionario-selector");
+});
+
+document.querySelector(".btn-addaccount").addEventListener("click", () => {
+  getFuncionariosNames("addaccount-funcionario");
 });
 
 const addPaymentButton = document.querySelector(".pagamento-bottom-adicionar");
@@ -302,10 +362,10 @@ export function formatDateInput(event) {
 
 export function formatDateString(dateString) {
   const date = new Date(dateString);
-  
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
   const year = date.getUTCFullYear();
-  
+
   return `${day}/${month}/${year}`;
 }

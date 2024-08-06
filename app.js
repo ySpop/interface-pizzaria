@@ -283,6 +283,29 @@ app.post("/fechamento-submit", async (req, res) => {
   }
 });
 
+app.post("/addaccount-submit", async (req, res) => {
+  const { funcionarioId, funcionarioAccount } = req.body;
+
+  try {
+    const pool = await sql.connect(sqlConfig);
+
+    await pool
+      .request()
+      .input("funcionarioId", sql.Int, funcionarioId)
+      .input("funcionarioAccount", sql.NVarChar, funcionarioAccount).query(`
+        INSERT INTO funcionarios_accounts (funcionario_id, funcionario_account)
+        VALUES (@funcionarioId, @funcionarioAccount)
+      `);
+
+    res
+      .status(200)
+      .send({ message: "Conta do funcionário adicionada com sucesso." });
+  } catch (error) {
+    console.error("Erro ao adicionar conta do funcionário:", error);
+    res.status(500).send({ error: "Erro ao adicionar conta do funcionário." });
+  }
+});
+
 app.get("/api/funcionarios", async (req, res) => {
   try {
     const result = await sql.query(
@@ -307,15 +330,35 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-app.get('/api/tabela', async (req, res) => {
+app.get("/api/accounts", (req, res) => {
+  const funcionarioId = req.query.funcionario_id;
+  const query = `
+    SELECT funcionario_account 
+    FROM funcionarios_accounts 
+    WHERE funcionario_id = @funcionarioId`;
+
+  const request = new sql.Request();
+  request.input("funcionarioId", sql.Int, funcionarioId);
+  request.query(query, (err, result) => {
+    if (err) {
+      console.error("Erro ao buscar contas:", err);
+      res.status(500).send("Erro ao buscar contas");
+    } else {
+      res.json(result.recordset);
+    }
+  });
+});
+
+app.get("/api/tabela", async (req, res) => {
   try {
-    console.log('Rota /api/tabela chamada');
+    console.log("Rota /api/tabela chamada");
 
     const result = await sql.query(`
       SELECT 
           pf.pagamento_id,
           pf.funcionario_id,
           f.funcionario_name AS funcionario_name,
+          fa.funcionario_account AS funcionario_account,
           pf.payment_date,
           pf.payment_amount,
           pf.description,
@@ -325,17 +368,20 @@ app.get('/api/tabela', async (req, res) => {
       JOIN 
           funcionarios f 
       ON 
-          pf.funcionario_id = f.funcionario_id;
+          pf.funcionario_id = f.funcionario_id
+      LEFT JOIN 
+          funcionarios_accounts fa
+      ON 
+          pf.funcionario_id = fa.funcionario_id;
     `);
 
-    console.log('Dados recebidos do banco de dados:', result.recordset);
+    console.log("Dados recebidos do banco de dados:", result.recordset);
     res.json(result.recordset);
   } catch (err) {
     console.error("Erro ao buscar tabela pagamentos:", err);
     res.status(500).send({ message: err.message });
   }
 });
-
 
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
