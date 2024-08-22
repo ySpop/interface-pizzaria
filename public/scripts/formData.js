@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const fechamentoForm = document.getElementById("fechamento-form");
   const addAccountForm = document.getElementById("addaccount-form");
+  const vendasFiltrosForm = document.getElementById("filtros-form");
 
   const btnPagamentoSendForm = document.getElementById("pagamentoSendBtn");
   const btnAddItem = document.querySelector(".btn-add-item");
@@ -20,6 +21,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (orderTypeInput.value === "Entrega") {
       orderTypeInput.value = "Balcão";
       toggleOrderTypeBtn.innerText = "Balcão";
+
+      inputsAddress.style.display = "none";
+      inputNeighbourhood.style.display = "none";
+
+      const arrayInputs = [
+        inputAddress,
+        inputAddressNumber,
+        inputNeighbourhood,
+      ];
+      arrayInputs.forEach((input) => {
+        input.value = "";
+      });
+    } else if (orderTypeInput.value === "Balcão") {
+      orderTypeInput.value = "Mesa";
+      toggleOrderTypeBtn.innerText = "Mesa";
 
       inputsAddress.style.display = "none";
       inputNeighbourhood.style.display = "none";
@@ -79,6 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   const dateFechamentoInput = document.querySelector(".input-fechamento-date");
   dateFechamentoInput.addEventListener("input", formatDateInput);
+  const vendasDateInput = document.querySelector(".vendas-order-date");
+  vendasDateInput.addEventListener("input", formatDateInput);
 
   if (vendaForm) {
     console.log("vendaForm found");
@@ -89,19 +107,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const formData = new FormData(event.target);
       const items = [];
+      const meiaItems = [];
       const itemInputs = document.querySelectorAll(
         ".inputs-container-item input"
       );
       const quantityInputs = document.querySelectorAll(
         ".inputs-container-quantity input"
       );
+      const categorySelectors = document.querySelectorAll(".category-selector");
+      const meiaInput1s = document.querySelectorAll(".addMeiaInput1");
+      const meiaInput2s = document.querySelectorAll(".addMeiaInput2");
+      const meiaQuantityInputs = document.querySelectorAll(
+        ".inputs-container-meia-quantity input"
+      );
 
       console.log("Capturing items");
+
       itemInputs.forEach((itemInput, index) => {
         const quantityInput = quantityInputs[index];
+        const categorySelect = categorySelectors[index];
         items.push({
           product_name: itemInput.value,
           quantity: parseInt(quantityInput.value, 10),
+          category: categorySelect ? categorySelect.value : null,
+        });
+      });
+
+      meiaInput1s.forEach((meiaInput1, index) => {
+        const meiaInput2 = meiaInput2s[index];
+        const meiaQuantityInput = meiaQuantityInputs[index];
+        const categorySelect = categorySelectors[index];
+        meiaItems.push({
+          product_name_1: meiaInput1.value,
+          product_name_2: meiaInput2.value,
+          quantity: parseInt(meiaQuantityInput.value, 10),
+          category: categorySelect ? categorySelect.value : null,
         });
       });
 
@@ -115,9 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "order-type": formData.get("order-type"),
         "order-neighbourhood": formData.get("order-neighbourhood"),
         items: items,
+        meiaItems: meiaItems,
       };
-
-      console.log(formData.get("order-date"));
 
       console.log("Venda Data:", vendaData);
 
@@ -272,28 +311,61 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function initializeAutocomplete() {
-    const productInputs = document.querySelectorAll(".product-comanda-input");
+  vendasFiltrosForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    fetch("/api/products")
+    const orderDate = document.querySelector(".vendas-order-date").value;
+    const formattedDate = formatDateToISO(orderDate);
+
+    fetch(`/api/vendas?orderDate=${formattedDate}`)
       .then((response) => response.json())
-      .then((products) => {
-        const productNames = products.map((product) => product.product_name);
-        productInputs.forEach((input) => {
-          new Awesomplete(input, { list: productNames });
-        });
+      .then((data) => {
+        const tableBody = document.getElementById("vendas-table-body");
+        tableBody.innerHTML = "";
+
+        if (data.message) {
+          const row = `<tr><td colspan="4" class="no-result-td">${data.message}<img class="bad-face-result-img" src="/assets/images/sad-face (1).png"></td></tr>`;
+          tableBody.insertAdjacentHTML("beforeend", row);
+        } else {
+          data.forEach((item) => {
+            const row = `
+              <tr data-order-id="${item.order_id}">
+                <td>${item.order_id}</td>
+                <td>${item.formatted_time}</td>
+                <td>${item.cost_payment.toFixed(2)}</td>
+                <td>${item.username}</td>
+              </tr>`;
+            tableBody.insertAdjacentHTML("beforeend", row);
+          });
+        }
       })
       .catch((error) => {
-        console.error("Erro ao carregar produtos:", error);
+        console.error("Erro ao buscar dados:", error);
       });
-  }
-
-  btnAddItem.addEventListener("click", (event) => {
-    event.preventDefault();
-    console.log("Adicionado");
-    initializeAutocomplete();
   });
 });
+
+export function initializeAutocomplete() {
+  const productInputs = document.querySelectorAll(".product-comanda-input");
+
+  fetch("/api/products")
+    .then((response) => response.json())
+    .then((products) => {
+      const productNames = products.map((product) => product.product_name);
+      productInputs.forEach((input) => {
+        const awesomplete = new Awesomplete(input, { list: productNames });
+
+        input.addEventListener("awesomplete-selectcomplete", () => {
+          setTimeout(() => {
+            awesomplete.close();
+          }, 70);
+        });
+      });
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar produtos:", error);
+    });
+}
 
 export function getFuncionariosNames(selectClass) {
   fetch("/api/funcionarios")
@@ -339,6 +411,26 @@ function getFuncionariosAccounts() {
     );
 }
 
+export function getPizzasCategories() {
+  fetch("/api/categories")
+    .then((response) => response.json())
+    .then((data) => {
+      const selects = document.querySelectorAll(".category-selector");
+      selects.forEach((select) => {
+        if (select.options.length === 0) {
+          data.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category.category;
+            option.textContent = category.category;
+            option.dataset.name = category.category;
+            select.appendChild(option);
+          });
+        }
+      });
+    })
+    .catch((error) => console.error("Erro ao buscar categorias:", error));
+}
+
 document.querySelector(".btn-fechamento").addEventListener("click", () => {
   getFuncionariosNames("funcionario-selector");
 });
@@ -372,4 +464,9 @@ export function formatDateString(dateString) {
   const year = date.getUTCFullYear();
 
   return `${day}/${month}/${year}`;
+}
+
+export function formatDateToISO(dateStr) {
+  const [day, month, year] = dateStr.split("/");
+  return `${year}-${month}-${day}`;
 }

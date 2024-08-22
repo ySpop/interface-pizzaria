@@ -1,6 +1,6 @@
 .comanda-content {
   width: 400px;
-  /* height: 300px; */
+  max-height: 100%;
   border-radius: 8px;
   background-color: #fff;
   padding: 15px;
@@ -8,6 +8,11 @@
   display: none;
   opacity: 0;
   visibility: hidden;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: black orange;
+  scroll-behavior: smooth;
 }
 
 .active {
@@ -186,6 +191,23 @@ input {
   transform: translateX(0) scale(1.1);
 }
 
+.btn-add-meia {
+  border: none;
+  padding: 7px;
+  background-color: yellowgreen;
+  border-radius: 15px;
+  text-wrap: nowrap;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+
+.btn-add-meia:hover {
+  cursor: pointer;
+  transform: translateX(0) scale(1.1);
+}
+
 .buttons-form {
   display: flex;
   align-items: center;
@@ -221,10 +243,22 @@ input {
 
 .inputs-container {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 5px;
   margin-bottom: 10px;
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.inputs-holder-inteiras {
+  /* grid-column: span 3; */
+  width: 100%;
+  /* display: grid; */
+  /* grid-template-columns: repeat(3, 1fr); */
+  /* grid-gap: 5px; */
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .inputs-container-item {
@@ -232,10 +266,6 @@ input {
   display: flex;
   flex-direction: column;
   gap: 5px;
-
-  input {
-    width: 100%;
-  }
 }
 
 .inputs-container-quantity {
@@ -243,10 +273,6 @@ input {
   display: flex;
   flex-direction: column;
   gap: 5px;
-
-  input {
-    width: 100%;
-  }
 }
 
 .comanda-items-btn {
@@ -254,4 +280,59 @@ input {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+  gap: 5px;
+}
+
+.inputs-container-meia {
+  /* border: 2px solid purple; */
+  width: 100%;
+  /* grid-column: span 3; */
+}
+
+.inputs-container-meia-items {
+  /* border: 2px solid black; */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.inputs-meia-holder {
+  width: 100%;
+  display: flex;
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr); */
+  /* grid-gap: 5px; */
+  align-items: center;
+  padding: 5px;
+  gap: 10px;
+
+  background-color: #cccccc56;
+  border-radius: 8px;
+}
+
+.product-input-quantity {
+  width: 50px;
+}
+
+.product-quantity-input {
+  width: 50px;
+}
+
+.category-selector {
+  outline: none;
+  border: 1px solid orange;
+  border-radius: 4px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  padding: 5px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.15);
+}
+
+.inputs-holder-inteiras .category-selector {
+  width: 120px;
+}
+
+.inputs-meia-holder .category-selector {
+  width: 100px;
 }

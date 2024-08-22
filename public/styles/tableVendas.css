@@ -1,0 +1,169 @@
+.tabela-vendas-content {
+  width: 450px;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.25);
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
+  display: flex;
+}
+
+.btn-filter-vendas {
+  border: none;
+  padding: 7px;
+  background-color: yellowgreen;
+  border-radius: 15px;
+  text-wrap: nowrap;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+
+.btn-filter-vendas:hover {
+  cursor: pointer;
+  transform: translateX(0) scale(1.1);
+}
+
+.tabela-vendas {
+  width: 100%;
+  border-collapse: collapse;
+  user-select: auto;
+}
+
+.tabela-vendas th,
+.tabela-vendas td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.tabela-vendas th {
+  background-color: green;
+  color: #fff;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+}
+
+.tabela-vendas tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tabela-vendas tr:hover {
+  cursor: pointer;
+}
+
+.vendas-table-holder {
+  width: 100%;
+  min-height: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: black orange;
+  scroll-behavior: smooth;
+}
+
+.vendas-top-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vendas-data-input-holder {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#filtros-form {
+  margin-bottom: 10px;
+}
+
+.vendas-first-td {
+  width: 10px;
+}
+
+.no-result-td {
+  display: table-cell;
+}
+
+.bad-face-result-img {
+  margin-top: 10px;
+  width: 50px;
+  height: 50px;
+}
+
+/* ############### DETALHES VENDAS MODAL ############### */
+
+.btn-close-sales-details {
+  cursor: pointer;
+}
+
+.detalhes-vendas-container {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.detalhes-vendas-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 10px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 8px;
+}
+
+.detalhes-top-content {
+  display: flex;
+  justify-content: right;
+}
+
+.tabela-sales-holder {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.tabela-sales-details {
+  width: 100%;
+  border-collapse: collapse;
+  user-select: hidden;
+}
+
+.tabela-sales-details th,
+.tabela-sales-details td {
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  padding: 8px;
+  text-align: center;
+}
+
+.tabela-sales-details th {
+  background-color: orange;
+  color: #fff;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+}
+
+.meia-row {
+  background-color: rgb(255, 182, 46);
+}
+
+.meia-row .meia-product-quantity-td {
+}

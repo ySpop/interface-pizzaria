@@ -1,5 +1,7 @@
 import { formatDateInput } from "/scripts/formData.js";
 import { getFuncionariosNames } from "/scripts/formData.js";
+import { initializeAutocomplete } from "/scripts/formData.js";
+import { getPizzasCategories } from "/scripts/formData.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const btnMenu = document.querySelector(".btn-menu");
@@ -14,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ".tabela-pagamentos-content"
   );
   const addAccountContent = document.querySelector(".addaccount-content");
+  const tableVendasContent = document.querySelector(".tabela-vendas-content");
 
   menuOptionsHolder.classList.remove("activeHolder");
   menuOptionsHolder.classList.remove("closeHolderTransition");
@@ -22,10 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
   fechamentoContainer.classList.remove("active");
   paymentsTableContent.classList.remove("active");
   addAccountContent.classList.remove("active");
+  tableVendasContent.classList.remove("active");
 
   toggleModal();
 
   const btnAddItem = document.querySelector(".btn-add-item");
+  const btnAddInputsMeia = document.querySelector(".btn-add-meia");
   const btnResetForm = document.querySelector(".btn-reset-form");
   const btnResetProductForm = document.querySelector(".btn-reset-product-form");
   const btnFechamentoResetForm = document.querySelector(
@@ -39,6 +44,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Botão AddItem clicado");
     addItemToContainer();
+  });
+
+  btnAddInputsMeia.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    console.log("Botão adicionar meia inputs clicado");
+    addMeiaInputs();
   });
 
   btnResetForm.addEventListener("click", (event) => {
@@ -69,30 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.log("Botão de adicionar pagamento não encontrado");
   }
-
-  function addItemToContainer() {
-    const inputsItemsContainer = document.querySelector(
-      ".inputs-container-item"
-    );
-    const inputsItemQuantityContainer = document.querySelector(
-      ".inputs-container-quantity"
-    );
-
-    const itemInput = document.createElement("input");
-    const itemInputQuantity = document.createElement("input");
-
-    itemInput.setAttribute("placeholder", "Digite o item");
-    itemInput.setAttribute("type", "text");
-    itemInput.setAttribute("name", "product-name");
-    itemInput.classList.add("product-comanda-input");
-
-    itemInputQuantity.setAttribute("placeholder", "Digite a quantidade");
-    itemInputQuantity.setAttribute("type", "number");
-    itemInputQuantity.setAttribute("name", "quantity");
-
-    inputsItemsContainer.appendChild(itemInput);
-    inputsItemQuantityContainer.appendChild(itemInputQuantity);
-  }
 });
 
 function toggleModal() {
@@ -105,6 +93,7 @@ function toggleModal() {
   const btnFechamento = document.querySelector(".btn-fechamento");
   const btnPayments = document.querySelector(".btn-payments");
   const btnAddAccount = document.querySelector(".btn-addaccount");
+  const btnTableVendas = document.querySelector(".btn-sales");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
   const fechamentoContainer = document.querySelector(
@@ -114,6 +103,7 @@ function toggleModal() {
     ".tabela-pagamentos-content"
   );
   const addAccountContent = document.querySelector(".addaccount-content");
+  const tableVendasContent = document.querySelector(".tabela-vendas-content");
   const body = document.querySelector(".body");
 
   function modalCloser() {
@@ -201,6 +191,18 @@ function toggleModal() {
     console.log(body);
   });
 
+  btnTableVendas.addEventListener("click", () => {
+    modalCloser();
+    closeOtherOptions();
+
+    console.log("Executada");
+
+    tableVendasContent.classList.add("active");
+    body.style.overflow = "auto";
+
+    console.log(body);
+  });
+
   console.log("Função toggleModal executada");
 }
 
@@ -214,48 +216,69 @@ function closeOtherOptions() {
     ".tabela-pagamentos-content"
   );
   const addAccountContent = document.querySelector(".addaccount-content");
+  const tableVendasContent = document.querySelector(".tabela-vendas-content");
 
   comandaContent.classList.remove("active");
   addProductDBContent.classList.remove("active");
   fechamentoContainer.classList.remove("active");
   paymentsTableContent.classList.remove("active");
   addAccountContent.classList.remove("active");
+  tableVendasContent.classList.remove("active");
 }
 
 function addItemToContainer() {
-  const inputsItemsContainer = document.querySelector(".inputs-container-item");
-  const inputsItemQuantityContainer = document.querySelector(
-    ".inputs-container-quantity"
-  );
-
+  const inputsContainer = document.querySelector(".inputs-container");
+  const inputsHolder = document.createElement("div");
+  const inputsItemsContainer = document.createElement("div");
+  const inputsItemQuantityContainer = document.createElement("div");
   const itemInput = document.createElement("input");
   const itemInputQuantity = document.createElement("input");
+  const itemBtnsHolder = document.createElement("div");
+  const categoryItemBtn = document.createElement("select");
 
   itemInput.setAttribute("placeholder", "Digite o item");
   itemInput.setAttribute("type", "text");
   itemInput.classList.add("product-comanda-input");
 
-  itemInputQuantity.setAttribute("placeholder", "Digite a quantidade");
+  itemInputQuantity.setAttribute("placeholder", "00");
   itemInputQuantity.setAttribute("type", "number");
+  itemInputQuantity.classList.add("product-input-quantity");
 
+  itemBtnsHolder.classList.add("item-btn-holder");
+  categoryItemBtn.classList.add("category-selector");
+  categoryItemBtn.setAttribute("name", "category")
+
+  inputsContainer.appendChild(inputsHolder);
+  inputsHolder.appendChild(inputsItemsContainer);
+  inputsHolder.appendChild(inputsItemQuantityContainer);
+  inputsHolder.appendChild(itemBtnsHolder);
   inputsItemsContainer.appendChild(itemInput);
   inputsItemQuantityContainer.appendChild(itemInputQuantity);
+  itemBtnsHolder.appendChild(categoryItemBtn);
+
+  inputsItemsContainer.classList.add("inputs-container-item");
+  inputsItemQuantityContainer.classList.add("inputs-container-quantity");
+  inputsHolder.classList.add("inputs-holder-inteiras");
+
+  initializeAutocomplete();
+  getPizzasCategories();
 }
 
 function removeItemFromContainer() {
-  const inputsItemsContainer = document.querySelector(".inputs-container-item");
-  const inputsItemQuantityContainer = document.querySelector(
-    ".inputs-container-quantity"
+  const inputsContainer = document.querySelector(".inputs-container");
+  const lastInputsHolder = inputsContainer.querySelector(
+    ".inputs-holder-inteiras:last-child"
+  );
+  const lastInputsMeiaHolder = inputsContainer.querySelector(
+    ".inputs-container-meia:last-child"
   );
 
-  if (inputsItemsContainer.lastElementChild) {
-    inputsItemsContainer.removeChild(inputsItemsContainer.lastElementChild);
+  if (lastInputsHolder) {
+    inputsContainer.removeChild(lastInputsHolder);
   }
 
-  if (inputsItemQuantityContainer.lastElementChild) {
-    inputsItemQuantityContainer.removeChild(
-      inputsItemQuantityContainer.lastElementChild
-    );
+  if (lastInputsMeiaHolder) {
+    inputsContainer.removeChild(lastInputsMeiaHolder);
   }
 }
 
@@ -338,6 +361,56 @@ function addItemFuncionarios(e) {
   inputDescricao.setAttribute("placeholder", "Descrição");
 
   addDeleteEventListeners();
+}
+
+function addMeiaInputs() {
+  console.log("Executada");
+
+  const inputsContainer = document.querySelector(".inputs-container");
+  const inputsMeiaContainer = document.createElement("div");
+  const inputsMeiaHolder = document.createElement("div");
+  const inputsMeiaQuantityContainer = document.createElement("div");
+  const inputsMeiaItemsContainer = document.createElement("div");
+  const addMeiaInput1 = document.createElement("input");
+  const addMeiaInput2 = document.createElement("input");
+  const addMeiaQuantity = document.createElement("input");
+  const itemBtnsHolder = document.createElement("div");
+  const categoryItemBtn = document.createElement("select");
+
+  addMeiaInput1.setAttribute("type", "text");
+  addMeiaInput1.setAttribute("placeholder", "Digite a primeira parte");
+  addMeiaInput1.classList.add("addMeiaInput1");
+  addMeiaInput1.classList.add("product-comanda-input");
+
+  addMeiaInput2.setAttribute("type", "text");
+  addMeiaInput2.setAttribute("placeholder", "Digite a segunda parte");
+  addMeiaInput2.classList.add("addMeiaInput2");
+  addMeiaInput2.classList.add("product-comanda-input");
+
+  addMeiaQuantity.setAttribute("type", "number");
+  addMeiaQuantity.setAttribute("placeholder", "00");
+  addMeiaQuantity.classList.add("product-quantity-input");
+
+  itemBtnsHolder.classList.add("item-btn-holder");
+  categoryItemBtn.classList.add("category-selector");
+
+  inputsMeiaContainer.classList.add("inputs-container-meia");
+  inputsMeiaItemsContainer.classList.add("inputs-container-meia-items");
+  inputsMeiaQuantityContainer.classList.add("inputs-container-meia-quantity");
+  inputsMeiaHolder.classList.add("inputs-meia-holder");
+
+  inputsContainer.appendChild(inputsMeiaContainer);
+  inputsMeiaContainer.appendChild(inputsMeiaHolder);
+  inputsMeiaHolder.appendChild(inputsMeiaItemsContainer);
+  inputsMeiaHolder.appendChild(inputsMeiaQuantityContainer);
+  inputsMeiaHolder.appendChild(itemBtnsHolder);
+  inputsMeiaHolder.appendChild(categoryItemBtn);
+  inputsMeiaItemsContainer.appendChild(addMeiaInput1);
+  inputsMeiaItemsContainer.appendChild(addMeiaInput2);
+  inputsMeiaQuantityContainer.appendChild(addMeiaQuantity);
+
+  initializeAutocomplete();
+  getPizzasCategories();
 }
 
 export function addDeleteEventListeners() {

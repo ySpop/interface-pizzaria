@@ -92,18 +92,31 @@ app.post("/venda-submit", async (req, res) => {
     const orderNeighbourhood = formData["order-neighbourhood"]
       ? `'${escapeString(formData["order-neighbourhood"])}'`
       : "NULL";
+    const orderTime = formData["order-time"]
+      ? `'${escapeString(formData["order-time"])}'`
+      : "NULL";
 
     const insertVendaQuery = `
-      INSERT INTO vendas (order_time, order_address, order_address_number, method_payment, cost_payment, order_date, order_neighbourhood, username, order_type)
+      INSERT INTO vendas (
+        order_time, 
+        order_address, 
+        order_address_number, 
+        method_payment, 
+        cost_payment, 
+        order_date, 
+        order_neighbourhood, 
+        username, 
+        order_type
+      )
       VALUES (
-        '${escapeString(formData["order-time"])}',
-        ${orderAddress},
-        ${orderAddressNumber},
-        '${escapeString(formData["method-payment"])}',
-        ${decimalValue},
-        '${orderDate}',
-        ${orderNeighbourhood},
-        '${username}',
+        ${orderTime}, 
+        ${orderAddress}, 
+        ${orderAddressNumber}, 
+        '${escapeString(formData["method-payment"])}', 
+        ${decimalValue}, 
+        '${orderDate}', 
+        ${orderNeighbourhood}, 
+        '${username}', 
         '${escapeString(formData["order-type"])}'
       );
       SELECT SCOPE_IDENTITY() AS order_id;
@@ -113,24 +126,99 @@ app.post("/venda-submit", async (req, res) => {
     const orderId = vendaResult.recordset[0].order_id;
 
     const items = formData.items;
-
     for (const item of items) {
       const productQuery = `
-        SELECT product_id, product_price FROM produtos WHERE product_name = '${escapeString(
-          item.product_name
-        )}'
+        SELECT product_id, product_price 
+        FROM produtos 
+        WHERE product_name = '${escapeString(item.product_name)}'
       `;
       const productResult = await request.query(productQuery);
 
       if (productResult.recordset.length > 0) {
         const product = productResult.recordset[0];
         const insertItemQuery = `
-          INSERT INTO itens_vendas (order_id, product_id, quantity, product_price, product_name)
-          VALUES (${orderId}, ${product.product_id}, ${item.quantity}, ${
-          product.product_price
-        }, '${escapeString(item.product_name)}');
+          INSERT INTO itens_vendas (
+            order_id, 
+            product_id, 
+            quantity, 
+            product_price, 
+            product_name, 
+            category
+          )
+          VALUES (
+            ${orderId}, 
+            ${product.product_id}, 
+            ${item.quantity}, 
+            ${product.product_price}, 
+            '${escapeString(item.product_name)}',
+            '${escapeString(item.category)}'
+          );
         `;
         await request.query(insertItemQuery);
+      }
+    }
+
+    const meiaItems = formData.meiaItems;
+    for (const meiaItem of meiaItems) {
+      const productQuery1 = `
+        SELECT product_id, product_price 
+        FROM produtos 
+        WHERE product_name = '${escapeString(meiaItem.product_name_1)}'
+      `;
+      const productResult1 = await request.query(productQuery1);
+
+      const productQuery2 = `
+        SELECT product_id, product_price 
+        FROM produtos 
+        WHERE product_name = '${escapeString(meiaItem.product_name_2)}'
+      `;
+      const productResult2 = await request.query(productQuery2);
+
+      if (
+        productResult1.recordset.length > 0 &&
+        productResult2.recordset.length > 0
+      ) {
+        const product1 = productResult1.recordset[0];
+        const product2 = productResult2.recordset[0];
+
+        const insertMeiaItemQuery1 = `
+          INSERT INTO itens_meio_a_meio (
+            order_id, 
+            product_id, 
+            quantity, 
+            product_price, 
+            product_name, 
+            category
+          )
+          VALUES (
+            ${orderId}, 
+            ${product1.product_id}, 
+            ${meiaItem.quantity}, 
+            ${product1.product_price}, 
+            '${escapeString(meiaItem.product_name_1)}',
+            '${escapeString(meiaItem.category)}'
+          );
+        `;
+        const insertMeiaItemQuery2 = `
+          INSERT INTO itens_meio_a_meio (
+            order_id, 
+            product_id, 
+            quantity, 
+            product_price, 
+            product_name, 
+            category
+          )
+          VALUES (
+            ${orderId}, 
+            ${product2.product_id}, 
+            ${meiaItem.quantity}, 
+            ${product2.product_price}, 
+            '${escapeString(meiaItem.product_name_2)}',
+            '${escapeString(meiaItem.category)}'
+          );
+        `;
+        await request.query(insertMeiaItemQuery1);
+        await request.query(insertMeiaItemQuery2);
       }
     }
 
@@ -343,6 +431,8 @@ app.get("/api/funcionarios", async (req, res) => {
 
 app.get("/api/products", async (req, res) => {
   try {
+    await sql.connect(sqlConfig);
+
     const result = await sql.query(
       "SELECT product_id, product_name FROM produtos"
     );
@@ -370,6 +460,69 @@ app.get("/api/accounts", (req, res) => {
       res.json(result.recordset);
     }
   });
+});
+
+app.get("/api/categories", async (req, res) => {
+  try {
+    await sql.connect(sqlConfig);
+    const request = new sql.Request();
+    const result = await request.query(
+      "SELECT category FROM pizzas_categorias"
+    );
+
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Erro ao buscar categorias:", err);
+    res.status(500).send({ error: "Erro ao buscar categorias" });
+  } finally {
+    await sql.close();
+  }
+});
+
+app.get("/venda-detalhes/:orderId", async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const request = new sql.Request();
+    request.input("orderId", sql.Int, orderId);
+
+    const queryVendaItems = `
+      SELECT iv.product_name, iv.quantity, iv.product_price
+      FROM itens_vendas iv
+      WHERE iv.order_id = @orderId;
+    `;
+    const vendaItemsResult = await request.query(queryVendaItems);
+
+    const queryMeiaItems = `
+      SELECT im.product_name, im.product_price, im.quantity
+      FROM itens_meio_a_meio im
+      WHERE im.order_id = @orderId;
+    `;
+    const meiaItemsResult = await request.query(queryMeiaItems);
+
+    const groupedMeiaItems = [];
+    for (let i = 0; i < meiaItemsResult.recordset.length; i += 2) {
+      const item1 = meiaItemsResult.recordset[i];
+      const item2 = meiaItemsResult.recordset[i + 1] || {};
+      groupedMeiaItems.push({
+        product_name_1: item1.product_name,
+        product_price_1: item1.product_price,
+        product_name_2: item2.product_name || "",
+        product_price_2: item2.product_price || "",
+        quantity: item1.quantity,
+      });
+    }
+
+    const vendaDetalhes = {
+      items: vendaItemsResult.recordset,
+      meiaItems: groupedMeiaItems,
+    };
+
+    res.json(vendaDetalhes);
+  } catch (error) {
+    console.error("Erro ao buscar detalhes da venda:", error);
+    res.status(500).json({ error: "Erro ao buscar detalhes da venda" });
+  }
 });
 
 app.get("/api/tabela", async (req, res) => {
@@ -400,6 +553,36 @@ app.get("/api/tabela", async (req, res) => {
     console.error("Erro ao buscar tabela pagamentos:", err);
     res.status(500).send({ message: err.message });
   }
+});
+
+app.get("/api/vendas", (req, res) => {
+  const { orderDate } = req.query;
+
+  let query = `SELECT order_id, CONVERT(VARCHAR(8), order_time, 108) AS formatted_time, cost_payment, username
+               FROM vendas 
+               WHERE order_date = @orderDate`;
+
+  sql
+    .connect(sqlConfig)
+    .then((pool) => {
+      return pool
+        .request()
+        .input("orderDate", sql.Date, orderDate)
+        .query(query);
+    })
+    .then((result) => {
+      if (result.recordset.length === 0) {
+        res.json({
+          message: "Nenhum resultado encontrado para a data especificada.",
+        });
+      } else {
+        res.json(result.recordset);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err.message);
+    });
 });
 
 app.get("/login", (req, res) => {

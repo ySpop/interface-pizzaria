@@ -223,33 +223,30 @@ h5 {
   justify-content: space-between;
 }
 
-/* Estilo do trilho da barra de rolagem (WebKit) */
 ::-webkit-scrollbar-track {
-  background: orange; /* Cor de fundo do trilho */
+  background: orange; 
   border-radius: 10px;
 }
 
-/* Estilo do polegar da barra de rolagem (WebKit) */
 ::-webkit-scrollbar-thumb {
-  background: orange; /* Cor do polegar */
+  background: orange; 
   border-radius: 10px;
 }
 
-/* Estilo do polegar ao passar o mouse sobre ele (WebKit) */
 ::-webkit-scrollbar-thumb:hover {
-  background: orange; /* Cor do polegar ao passar o mouse */
+  background: orange;
 }
 
 /* Estilo básico para a barra de rolagem (Firefox) */
 .funcionarios-group-holder {
-  scrollbar-width: thin; /* Largura da barra de rolagem */
-  scrollbar-color: black orange; /* Cor do polegar e do trilho */
+  scrollbar-width: thin;
+  scrollbar-color: black orange; 
   scroll-behavior: smooth;
 }
 
 .fechamento-groups-holder {
-  scrollbar-width: thin; /* Largura da barra de rolagem */
-  scrollbar-color: black orange; /* Cor do polegar e do trilho */
+  scrollbar-width: thin; 
+  scrollbar-color: black orange;
   scroll-behavior: smooth;
 }
 
