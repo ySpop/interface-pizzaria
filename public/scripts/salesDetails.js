@@ -2,6 +2,7 @@ const salesModalHolder = document.querySelector(".detalhes-vendas-container");
 const closeModal = document.querySelector(".btn-close-sales-details");
 const tabelaVendas = document.getElementById("tabela-vendas");
 const btnSales = document.querySelector(".btn-sales");
+const outmodal = document.querySelector(".outmodal-content");
 
 document.addEventListener("DOMContentLoaded", () => {
   btnSales.addEventListener("click", () => {
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       if (salesModalHolder) {
         salesModalHolder.style.display = "block";
+        outmodal.classList.add("disabled-events");
       } else {
         console.error(
           "Elemento com CLASSE 'detalhes-vendas-container' não encontrado."
@@ -99,10 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 closeModal.addEventListener("click", () => {
   salesModalHolder.style.display = "none";
+  outmodal.classList.remove("disabled-events");
 });
 
 window.onclick = (event) => {
   if (event.target == salesModalHolder) {
     salesModalHolder.style.display = "none";
+    outmodal.classList.remove("disabled-events");
   }
 };
+
+

@@ -317,6 +317,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const orderDate = document.querySelector(".vendas-order-date").value;
     const formattedDate = formatDateToISO(orderDate);
 
+    countersData(orderDate);
+    populateSalesCounters(formattedDate);
+
     fetch(`/api/vendas?orderDate=${formattedDate}`)
       .then((response) => response.json())
       .then((data) => {
@@ -344,6 +347,71 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 });
+
+async function countersData(orderDate) {
+  console.log(orderDate);
+
+  try {
+    const response = await fetch("/contar-vendas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ orderDate }),
+    });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(`Não foi possível enviar os dados para o servidor, ${error}`);
+  }
+}
+
+async function populateSalesCounters(date) {
+  try {
+    const response = await fetch("/contar-vendas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderDate: date }),
+    });
+    const data = await response.json();
+
+    const typeCounters = {};
+
+    data.forEach((item) => {
+      const { product_type, quantidade_vendida } = item;
+
+      if (!typeCounters[product_type]) {
+        typeCounters[product_type] = 0;
+      }
+
+      typeCounters[product_type] += quantidade_vendida;
+    });
+
+    const container = document.querySelector(".tabela-vendas-info");
+
+    container.innerHTML = "";
+
+    for (const [type, quantity] of Object.entries(typeCounters)) {
+      const counterHolder = document.createElement("div");
+      counterHolder.className = "sales-counter-holder";
+
+      const title = document.createElement("h5");
+      title.textContent = type;
+      counterHolder.appendChild(title);
+
+      const counterBox = document.createElement("div");
+      counterBox.className = "counters-box";
+
+      counterBox.textContent = quantity;
+
+      counterHolder.appendChild(counterBox);
+
+      container.appendChild(counterHolder);
+    }
+  } catch (error) {
+    console.error("Erro ao preencher contadores de vendas:", error);
+  }
+}
 
 export function initializeAutocomplete() {
   const productInputs = document.querySelectorAll(".product-comanda-input");

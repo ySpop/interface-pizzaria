@@ -66,6 +66,7 @@
   min-height: 250px;
   max-height: 300px;
   overflow-y: auto;
+  margin-bottom: 10px;
 
   scrollbar-width: thin;
   scrollbar-color: black orange;
@@ -165,5 +166,111 @@
   background-color: rgb(255, 182, 46);
 }
 
-.meia-row .meia-product-quantity-td {
+.tabela-vendas-bottom-content {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-vendas-itens {
+  padding: 10px;
+  border: none;
+  border-radius: 15px;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+  transition: transform 0.2s ease;
+  background-color: orange;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-vendas-itens:hover {
+  transform: translateX(0) scale(1.1);
+}
+
+.counters-box {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid orange;
+  border-radius: 4px;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.103);
+}
+
+.modal-vendas-itens-holder {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-vendas-itens-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 10px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-close-sales-itens {
+  cursor: pointer;
+}
+
+.modal-vendas-itens-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.modal-vendas-itens-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  border: 3px solid orange;
+  background-color: #cccccc23;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.modal-vendas-itens-line {
+  width: 100%;
+  border: 1px dashed rgba(0, 0, 0, 0.226);
+}
+
+.tabela-vendas-info {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  /* border: 1px solid red; */
+}
+
+.modal-vendas-top-title {
+  font-size: 27px;
+  color: orange;
+  font-weight: 600;
+}
+
+.noSelectedData {
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.noSeletectedDataError {
+  font-weight: 700;
+  font-size: 17px;
+  color: red;
+  margin-right: 5px;
 }

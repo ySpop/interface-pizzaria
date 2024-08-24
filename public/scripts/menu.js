@@ -17,6 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const addAccountContent = document.querySelector(".addaccount-content");
   const tableVendasContent = document.querySelector(".tabela-vendas-content");
+  const modalVendasItensHolder = document.querySelector(
+    ".modal-vendas-itens-holder"
+  );
+
+  const outmodal = document.querySelector(".outmodal-content");
 
   menuOptionsHolder.classList.remove("activeHolder");
   menuOptionsHolder.classList.remove("closeHolderTransition");
@@ -38,39 +43,32 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const btnSendForm = document.getElementById("btn-send-form");
   const btnDeleteItem = document.getElementById("btn-delete-last-item");
+  const btnVendasItens = document.querySelector(".btn-vendas-itens");
+  const btnCloseVendasItens = document.querySelector(".btn-close-sales-itens");
 
   btnAddItem.addEventListener("click", (event) => {
     event.preventDefault();
-
-    console.log("Botão AddItem clicado");
     addItemToContainer();
   });
 
   btnAddInputsMeia.addEventListener("click", (event) => {
     event.preventDefault();
-
-    console.log("Botão adicionar meia inputs clicado");
     addMeiaInputs();
   });
 
   btnResetForm.addEventListener("click", (event) => {
     event.preventDefault();
     resetModal();
-    console.log("Botão Apagar clicado");
   });
 
   btnFechamentoResetForm.addEventListener("click", (event) => {
     event.preventDefault();
     resetModal();
-    console.log("Botão Apagar clicado");
   });
 
   btnDeleteItem.addEventListener("click", (event) => {
     event.preventDefault();
-
     removeItemFromContainer();
-
-    console.log("Botão Retroceder clicado");
   });
 
   const addPaymentButton = document.querySelector(
@@ -81,6 +79,31 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.log("Botão de adicionar pagamento não encontrado");
   }
+
+  btnVendasItens.addEventListener("click", () => {
+    modalVendasItensHolder.style.display = "block";
+    outmodal.classList.add("disabled-events");
+
+    window.onclick = (event) => {
+      if (event.target == modalVendasItensHolder) {
+        modalVendasItensHolder.style.display = "none";
+        outmodal.classList.remove("disabled-events");
+      }
+    };
+
+    const vendasTableInputDate = document.querySelector(".vendas-order-date");
+    const tabelaVendasInfo = document.querySelector(".tabela-vendas-info");
+    const noData = vendasTableInputDate.value === "";
+
+    if (noData) {
+      tabelaVendasInfo.innerHTML = `<h5 class="noSelectedData" style="grid-column: span 3; text-align: center;"><span class="noSeletectedDataError">Erro:</span>Digite uma data</h5>`;
+    }
+  });
+
+  btnCloseVendasItens.addEventListener("click", () => {
+    modalVendasItensHolder.style.display = "none";
+    outmodal.classList.remove("disabled-events");
+  });
 });
 
 function toggleModal() {
@@ -246,7 +269,7 @@ function addItemToContainer() {
 
   itemBtnsHolder.classList.add("item-btn-holder");
   categoryItemBtn.classList.add("category-selector");
-  categoryItemBtn.setAttribute("name", "category")
+  categoryItemBtn.setAttribute("name", "category");
 
   inputsContainer.appendChild(inputsHolder);
   inputsHolder.appendChild(inputsItemsContainer);

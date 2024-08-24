@@ -419,13 +419,18 @@ app.delete("/delete-payment/:id", async (req, res) => {
 
 app.get("/api/funcionarios", async (req, res) => {
   try {
+    await sql.connect(sqlConfig);
+
     const result = await sql.query(
       "SELECT funcionario_id, funcionario_name FROM funcionarios"
     );
+
     res.json(result.recordset);
   } catch (err) {
     console.error("Erro ao buscar funcionários:", err);
     res.status(500).json({ error: "Erro ao buscar funcionários" });
+  } finally {
+    await sql.close();
   }
 });
 
@@ -483,6 +488,8 @@ app.get("/venda-detalhes/:orderId", async (req, res) => {
   const { orderId } = req.params;
 
   try {
+    await sql.connect(sqlConfig);
+
     const request = new sql.Request();
     request.input("orderId", sql.Int, orderId);
 
@@ -522,6 +529,8 @@ app.get("/venda-detalhes/:orderId", async (req, res) => {
   } catch (error) {
     console.error("Erro ao buscar detalhes da venda:", error);
     res.status(500).json({ error: "Erro ao buscar detalhes da venda" });
+  } finally {
+    await sql.close();
   }
 });
 
@@ -583,6 +592,84 @@ app.get("/api/vendas", (req, res) => {
       console.error(err);
       res.status(500).send(err.message);
     });
+});
+
+app.post("/contar-vendas", async (req, res) => {
+  const { orderDate } = req.body;
+
+  if (!orderDate) {
+    return res.status(400).json({ error: "Nenhuma data foi fornecida." });
+  }
+
+  try {
+    await sql.connect(sqlConfig);
+
+    const formattedDate = orderDate.split("/").reverse().join("-");
+
+    const request = new sql.Request();
+    request.input("formattedDate", sql.Date, formattedDate);
+
+    const query = `
+      WITH MeiaPares AS (
+        -- Identificar pares de itens meio a meio
+        SELECT
+          v.order_id,
+          p.product_type,
+          im.product_name,
+          ROW_NUMBER() OVER (PARTITION BY v.order_id ORDER BY im.product_id) AS rn
+        FROM vendas v
+        JOIN itens_meio_a_meio im ON v.order_id = im.order_id
+        JOIN produtos p ON im.product_id = p.product_id
+        WHERE v.order_date = @formattedDate
+      ),
+      MeiaParesContagem AS (
+        -- Agrupar em pares e contar
+        SELECT
+          product_type,
+          COUNT(DISTINCT order_id) / 2 AS quantidade_vendida
+        FROM MeiaPares
+        GROUP BY product_type
+      )
+      SELECT
+        product_type,
+        SUM(quantidade_vendida) AS quantidade_vendida
+      FROM (
+        -- Consulta para itens de vendas normais
+        SELECT
+          p.product_type,
+          SUM(iv.quantity) AS quantidade_vendida
+        FROM vendas v
+        JOIN itens_vendas iv ON v.order_id = iv.order_id
+        JOIN produtos p ON iv.product_id = p.product_id
+        WHERE v.order_date = @formattedDate
+        GROUP BY p.product_type
+
+        UNION ALL
+
+        -- Consulta para pizzas meio a meio
+        SELECT
+          product_type,
+          quantidade_vendida
+        FROM MeiaParesContagem
+      ) AS combined
+      GROUP BY product_type
+    `;
+
+    const result = await request.query(query);
+
+    if (result.recordset.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "Nenhuma venda encontrada para a data especificada." });
+    }
+
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Erro ao contar vendas:", err);
+    res.status(500).json({ error: "Erro ao contar vendas." });
+  } finally {
+    await sql.close();
+  }
 });
 
 app.get("/login", (req, res) => {

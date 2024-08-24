@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Hugo Domingos Pina" />
+    <link
+      rel="icon"
+      href="/assets/images/pizzaria_pina_banner-fotor-20240823822.png"
+      type="image/png"
+    />
     <link rel="stylesheet" href="/styles/style.css" />
     <link rel="stylesheet" href="/styles/comanda.css" />
     <link rel="stylesheet" href="/styles/addproductdb.css" />
@@ -26,7 +31,7 @@
     ></script>
   </head>
   <body class="body">
-    <header class="header">
+    <header class="header outmodal-content">
       <section class="header-content container-grid">
         <h3 class="header-content-title">Pizzaria Pina</h3>
         <h5 id="username-display"></h5>
@@ -40,7 +45,7 @@
     </header>
 
     <main>
-      <section class="main-content">
+      <section class="main-content outmodal-content">
         <section class="menu-opcoes-holder">
           <section class="menu-opcoes-content">
             <div class="menu-content-top">
@@ -123,10 +128,7 @@
                 <h5 class="comanda-items-text">Digite os itens</h5>
               </div>
 
-              <div class="inputs-container">
-                <!-- <div class="inputs-container-item"></div>
-                <div class="inputs-container-quantity"></div> -->
-              </div>
+              <div class="inputs-container"></div>
             </div>
 
             <div class="comanda-items-btn">
@@ -692,7 +694,6 @@
             <table id="pagamentos-table" class="pagamentos-table">
               <thead>
                 <tr>
-                  <!-- Adicione os cabeçalhos das colunas aqui -->
                   <th class="payment-cell">Pagamento ID</th>
                   <th>Nome</th>
                   <th>Data</th>
@@ -774,6 +775,41 @@
               <tbody id="vendas-table-body"></tbody>
             </table>
           </section>
+
+          <div class="tabela-vendas-bottom-content">
+            <button class="btn-vendas-itens">Vendas</button>
+          </div>
+
+          <section class="modal-vendas-itens-holder">
+            <section class="modal-vendas-itens-content">
+              <div class="modal-vendas-itens-top">
+                <h5 class="modal-vendas-top-title">Produtos vendidos</h5>
+                <img
+                  class="btn-close-sales-itens"
+                  src="/assets/icons/close_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                  alt="Fechar menu"
+                />
+              </div>
+              <div class="modal-vendas-itens-mid">
+                <div class="tabela-vendas-info">
+                  <!-- <div class="sales-counter-holder">
+                    <h5>Pedidos</h5>
+                    <div class="sales-counter counters-box"></div>
+                  </div>
+
+                  <div class="sales-counter-holder">
+                    <h5>Pizzas</h5>
+                    <div class="pizzas-counter counters-box"></div>
+                  </div>
+
+                  <div class="sales-counter-holder">
+                    <h5>Pizzas</h5>
+                    <div class="pizzas-counter counters-box"></div>
+                  </div> -->
+                </div>
+              </div>
+            </section>
+          </section>
         </section>
 
         <section class="detalhes-vendas-container">
@@ -802,8 +838,16 @@
       </section>
     </main>
 
-    <footer class="footer">
-      <section class="footer-content container-grid">Footer</section>
+    <footer class="footer outmodal-content">
+      <section class="footer-content container-grid">
+        <div class="help-msg-container">
+          <h5 class="help-msg">Dúvidas ?</h5>
+          <img
+            class="help-icon"
+            src="/assets/icons/help_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+          />
+        </div>
+      </section>
     </footer>
 
     <script type="module">

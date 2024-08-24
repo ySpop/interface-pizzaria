@@ -254,13 +254,28 @@ main {
   padding: 10px;
 }
 
+.help-msg-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.help-msg,
+.help-icon {
+  cursor: pointer;
+}
+
+.disabled-events {
+  pointer-events: none;
+}
+
 ::-webkit-scrollbar-track {
   background: orange;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: orange; 
+  background: orange;
   border-radius: 10px;
 }
 
