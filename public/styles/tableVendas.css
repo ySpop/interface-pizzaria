@@ -1,5 +1,5 @@
 .tabela-vendas-content {
-  width: 450px;
+  max-width: 480px;
   border-radius: 8px;
   background-color: #fff;
   padding: 15px;
@@ -256,6 +256,12 @@
   gap: 5px;
   /* border: 1px solid red; */
 }
+.full-width {
+  grid-column: span 3;
+  text-align: center;
+  white-space: nowrap;
+  margin: 0;
+}
 
 .modal-vendas-top-title {
   font-size: 27px;
@@ -273,4 +279,22 @@
   font-size: 17px;
   color: red;
   margin-right: 5px;
+}
+
+.tabela-vendas-date-label {
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+}
+
+.thead-vendas-table .header-content {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  gap: 5px; 
+}
+
+.thead-vendas-table img {
+  width: 24px;
+  height: auto;
 }

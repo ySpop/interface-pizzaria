@@ -110,5 +110,3 @@ window.onclick = (event) => {
     outmodal.classList.remove("disabled-events");
   }
 };
-
-

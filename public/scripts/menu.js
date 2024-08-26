@@ -1,5 +1,6 @@
 import { formatDateInput } from "/scripts/formData.js";
 import { getFuncionariosNames } from "/scripts/formData.js";
+import { getFuncionariosAccounts } from "/scripts/formData.js";
 import { initializeAutocomplete } from "/scripts/formData.js";
 import { getPizzasCategories } from "/scripts/formData.js";
 
@@ -383,9 +384,13 @@ function addItemFuncionarios(e) {
   inputDescricao.setAttribute("type", "text");
   inputDescricao.setAttribute("placeholder", "Descrição");
 
+  funcionarioSelector.addEventListener("change", (event) => {
+    const funcionarioId = event.target.value;
+    getFuncionariosAccounts(funcionarioId, selectAccountFuncionario);
+  });
+
   addDeleteEventListeners();
 }
-
 function addMeiaInputs() {
   console.log("Executada");
 

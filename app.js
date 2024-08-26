@@ -448,23 +448,28 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-app.get("/api/accounts", (req, res) => {
+app.get("/api/accounts", async (req, res) => {
   const funcionarioId = req.query.funcionario_id;
   const query = `
     SELECT funcionario_account 
     FROM funcionarios_accounts 
     WHERE funcionario_id = @funcionarioId`;
 
-  const request = new sql.Request();
-  request.input("funcionarioId", sql.Int, funcionarioId);
-  request.query(query, (err, result) => {
-    if (err) {
-      console.error("Erro ao buscar contas:", err);
-      res.status(500).send("Erro ao buscar contas");
-    } else {
-      res.json(result.recordset);
-    }
-  });
+  try {
+    await sql.connect(sqlConfig);
+
+    const request = new sql.Request();
+    request.input("funcionarioId", sql.Int, funcionarioId);
+
+    const result = await request.query(query);
+
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("Erro ao buscar contas:", err);
+    res.status(500).send("Erro ao buscar contas");
+  } finally {
+    await sql.close();
+  }
 });
 
 app.get("/api/categories", async (req, res) => {
@@ -610,31 +615,56 @@ app.post("/contar-vendas", async (req, res) => {
     request.input("formattedDate", sql.Date, formattedDate);
 
     const query = `
-      WITH MeiaPares AS (
-        -- Identificar pares de itens meio a meio
+      WITH PizzasInteiras AS (
+        -- Contar pizzas inteiras
         SELECT
-          v.order_id,
-          p.product_type,
-          im.product_name,
-          ROW_NUMBER() OVER (PARTITION BY v.order_id ORDER BY im.product_id) AS rn
+          'Pizza Inteira' AS product_type,
+          SUM(iv.quantity) AS quantidade_vendida
         FROM vendas v
-        JOIN itens_meio_a_meio im ON v.order_id = im.order_id
-        JOIN produtos p ON im.product_id = p.product_id
+        JOIN itens_vendas iv ON v.order_id = iv.order_id
+        JOIN produtos p ON iv.product_id = p.product_id
         WHERE v.order_date = @formattedDate
+        AND p.product_type = 'Pizza Inteira'
+        GROUP BY p.product_type
       ),
-      MeiaParesContagem AS (
-        -- Agrupar em pares e contar
+      PizzasMeioAMeio AS (
+        -- Identificar todos os itens meio a meio
         SELECT
-          product_type,
-          COUNT(DISTINCT order_id) / 2 AS quantidade_vendida
-        FROM MeiaPares
-        GROUP BY product_type
+          im.order_id,
+          COUNT(*) AS item_count
+        FROM itens_meio_a_meio im
+        JOIN vendas v ON v.order_id = im.order_id
+        WHERE v.order_date = @formattedDate
+        GROUP BY im.order_id
+      ),
+      TotalMeioAMeio AS (
+        -- Contar o número total de pizzas meio a meio
+        SELECT
+          SUM(item_count / 2) AS quantidade_vendida
+        FROM PizzasMeioAMeio
+        WHERE item_count % 2 = 0
       )
       SELECT
         product_type,
         SUM(quantidade_vendida) AS quantidade_vendida
       FROM (
-        -- Consulta para itens de vendas normais
+        -- Consulta para pizzas inteiras
+        SELECT
+          product_type,
+          quantidade_vendida
+        FROM PizzasInteiras
+
+        UNION ALL
+
+        -- Consulta para pizzas meio a meio
+        SELECT
+          'Pizza Meio a Meio' AS product_type,
+          quantidade_vendida
+        FROM TotalMeioAMeio
+
+        UNION ALL
+
+        -- Consulta para outros produtos
         SELECT
           p.product_type,
           SUM(iv.quantity) AS quantidade_vendida
@@ -642,15 +672,9 @@ app.post("/contar-vendas", async (req, res) => {
         JOIN itens_vendas iv ON v.order_id = iv.order_id
         JOIN produtos p ON iv.product_id = p.product_id
         WHERE v.order_date = @formattedDate
+        AND p.product_type <> 'Pizza Inteira' -- Excluir pizzas inteiras
+        AND p.product_type <> 'Pizza Meio a Meio' -- Excluir pizzas meio a meio
         GROUP BY p.product_type
-
-        UNION ALL
-
-        -- Consulta para pizzas meio a meio
-        SELECT
-          product_type,
-          quantidade_vendida
-        FROM MeiaParesContagem
       ) AS combined
       GROUP BY product_type
     `;

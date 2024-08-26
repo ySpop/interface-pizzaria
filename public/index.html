@@ -748,7 +748,9 @@
           <form id="filtros-form">
             <div class="vendas-top-content">
               <div class="vendas-data-input-holder">
-                <label for="order-date">Data:</label>
+                <label class="tabela-vendas-date-label" for="order-date"
+                  >Data:</label
+                >
                 <input
                   class="vendas-order-date"
                   type="text"
@@ -766,9 +768,45 @@
             <table id="tabela-vendas" class="tabela-vendas">
               <thead>
                 <tr>
-                  <th>ID do Pedido</th>
-                  <th>Hora</th>
-                  <th>Valor</th>
+                  <th class="thead-vendas-table">
+                    <div
+                      class="header-content sorting-header"
+                      data-column="id"
+                      data-order="asc"
+                    >
+                      <img
+                        class="sorting-controls button"
+                        src="/assets/icons/keyboard_arrow_up_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                      />
+                      <span>ID do Pedido</span>
+                    </div>
+                  </th>
+                  <th class="thead-vendas-table">
+                    <div
+                      class="header-content sorting-header"
+                      data-column="hora"
+                      data-order="asc"
+                    >
+                      <img
+                        class="sorting-controls button"
+                        src="/assets/icons/keyboard_arrow_up_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                      />
+                      <span>Hora</span>
+                    </div>
+                  </th>
+                  <th class="thead-vendas-table">
+                    <div
+                      class="header-content sorting-header"
+                      data-column="valor"
+                      data-order="asc"
+                    >
+                      <img
+                        class="sorting-controls button"
+                        src="/assets/icons/keyboard_arrow_up_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg"
+                      />
+                      <span>Valor</span>
+                    </div>
+                  </th>
                   <th>Quem registrou</th>
                 </tr>
               </thead>
@@ -791,22 +829,7 @@
                 />
               </div>
               <div class="modal-vendas-itens-mid">
-                <div class="tabela-vendas-info">
-                  <!-- <div class="sales-counter-holder">
-                    <h5>Pedidos</h5>
-                    <div class="sales-counter counters-box"></div>
-                  </div>
-
-                  <div class="sales-counter-holder">
-                    <h5>Pizzas</h5>
-                    <div class="pizzas-counter counters-box"></div>
-                  </div>
-
-                  <div class="sales-counter-holder">
-                    <h5>Pizzas</h5>
-                    <div class="pizzas-counter counters-box"></div>
-                  </div> -->
-                </div>
+                <div class="tabela-vendas-info"></div>
               </div>
             </section>
           </section>

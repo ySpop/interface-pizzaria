@@ -1,3 +1,5 @@
+let salesData = [];
+
 document.addEventListener("DOMContentLoaded", () => {
   const addProductForm = document.getElementById("add-product-form");
   const vendaForm = document.getElementById("venda-form");
@@ -317,12 +319,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const orderDate = document.querySelector(".vendas-order-date").value;
     const formattedDate = formatDateToISO(orderDate);
 
-    countersData(orderDate);
     populateSalesCounters(formattedDate);
 
     fetch(`/api/vendas?orderDate=${formattedDate}`)
       .then((response) => response.json())
       .then((data) => {
+        salesData = data;
+
         const tableBody = document.getElementById("vendas-table-body");
         tableBody.innerHTML = "";
 
@@ -330,16 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const row = `<tr><td colspan="4" class="no-result-td">${data.message}<img class="bad-face-result-img" src="/assets/images/sad-face (1).png"></td></tr>`;
           tableBody.insertAdjacentHTML("beforeend", row);
         } else {
-          data.forEach((item) => {
-            const row = `
-              <tr data-order-id="${item.order_id}">
-                <td>${item.order_id}</td>
-                <td>${item.formatted_time}</td>
-                <td>${item.cost_payment.toFixed(2)}</td>
-                <td>${item.username}</td>
-              </tr>`;
-            tableBody.insertAdjacentHTML("beforeend", row);
-          });
+          renderTableRows(salesData, tableBody);
         }
       })
       .catch((error) => {
@@ -348,22 +342,74 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-async function countersData(orderDate) {
-  console.log(orderDate);
-
-  try {
-    const response = await fetch("/contar-vendas", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ orderDate }),
-    });
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.log(`Não foi possível enviar os dados para o servidor, ${error}`);
+function sortDataTable(data, column, order) {
+  if (!Array.isArray(data)) {
+    console.error("Os dados fornecidos para ordenação não são um array.");
+    return;
   }
+
+  data.sort((a, b) => {
+    let comparison = 0;
+
+    if (column === "hora") {
+      const [hoursA, minutesA] = a.formatted_time.split(":").map(Number);
+      const [hoursB, minutesB] = b.formatted_time.split(":").map(Number);
+
+      const totalMinutesA = hoursA * 60 + minutesA;
+      const totalMinutesB = hoursB * 60 + minutesB;
+
+      comparison = totalMinutesA - totalMinutesB;
+    } else if (column === "valor") {
+      comparison = a.cost_payment - b.cost_payment;
+    } else if (column === "id") {
+      comparison = a.order_id - b.order_id;
+    }
+
+    return order === "asc" ? comparison : -comparison;
+  });
+
+  const tableBody = document.getElementById("vendas-table-body");
+  renderTableRows(data, tableBody);
+}
+
+document.querySelectorAll(".sorting-header").forEach((header) => {
+  header.addEventListener("click", () => {
+    const column = header.getAttribute("data-column");
+    let order = header.getAttribute("data-order");
+
+    if (!column) {
+      console.error("Coluna não definida.");
+      return;
+    }
+
+    order = order === "asc" ? "desc" : "asc";
+    header.setAttribute("data-order", order);
+
+    const arrowImg = header.querySelector("img");
+    if (order === "asc") {
+      arrowImg.src =
+        "/assets/icons/keyboard_arrow_up_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg";
+    } else {
+      arrowImg.src =
+        "/assets/icons/keyboard_arrow_down_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg";
+    }
+
+    sortDataTable(salesData, column, order);
+  });
+});
+
+function renderTableRows(data, tableBody) {
+  tableBody.innerHTML = "";
+  data.forEach((item) => {
+    const row = `
+      <tr data-order-id="${item.order_id}">
+        <td>${item.order_id}</td>
+        <td>${item.formatted_time}</td>
+        <td>${item.cost_payment.toFixed(2)}</td>
+        <td>${item.username}</td>
+      </tr>`;
+    tableBody.insertAdjacentHTML("beforeend", row);
+  });
 }
 
 async function populateSalesCounters(date) {
@@ -380,33 +426,46 @@ async function populateSalesCounters(date) {
     data.forEach((item) => {
       const { product_type, quantidade_vendida } = item;
 
-      if (!typeCounters[product_type]) {
-        typeCounters[product_type] = 0;
-      }
+      if (quantidade_vendida > 0) {
+        if (!typeCounters[product_type]) {
+          typeCounters[product_type] = 0;
+        }
 
-      typeCounters[product_type] += quantidade_vendida;
+        typeCounters[product_type] += quantidade_vendida;
+      }
     });
 
     const container = document.querySelector(".tabela-vendas-info");
 
     container.innerHTML = "";
 
+    let hasValidData = false;
+
     for (const [type, quantity] of Object.entries(typeCounters)) {
-      const counterHolder = document.createElement("div");
-      counterHolder.className = "sales-counter-holder";
+      if (quantity > 0) {
+        hasValidData = true;
 
-      const title = document.createElement("h5");
-      title.textContent = type;
-      counterHolder.appendChild(title);
+        const counterHolder = document.createElement("div");
+        counterHolder.className = "sales-counter-holder";
 
-      const counterBox = document.createElement("div");
-      counterBox.className = "counters-box";
+        const title = document.createElement("h5");
+        title.textContent = type;
+        counterHolder.appendChild(title);
+        title.style.textWrap = "nowrap";
 
-      counterBox.textContent = quantity;
+        const counterBox = document.createElement("div");
+        counterBox.className = "counters-box";
 
-      counterHolder.appendChild(counterBox);
+        counterBox.textContent = quantity;
 
-      container.appendChild(counterHolder);
+        counterHolder.appendChild(counterBox);
+
+        container.appendChild(counterHolder);
+      }
+    }
+
+    if (!hasValidData) {
+      container.innerHTML = `<p class="full-width">Nenhum dado disponível para a data selecionada.</p>`;
     }
   } catch (error) {
     console.error("Erro ao preencher contadores de vendas:", error);
@@ -455,28 +514,36 @@ export function getFuncionariosNames(selectClass) {
     .catch((error) => console.error("Erro ao buscar funcionários:", error));
 }
 
-function getFuncionariosAccounts() {
-  fetch("/api/funcionarios_accounts")
+export function getFuncionariosAccounts(
+  funcionarioId,
+  selectAccountFuncionario
+) {
+  if (!selectAccountFuncionario) {
+    console.error("O seletor de contas do funcionário está indefinido.");
+    return;
+  }
+
+  fetch(`/api/accounts?funcionario_id=${funcionarioId}`)
     .then((response) => response.json())
     .then((data) => {
-      const selects = document.querySelectorAll(
-        ".funcionario-account-selector"
-      );
-      selects.forEach((select) => {
-        if (select.options.length === 0) {
-          data.forEach((funcionario) => {
-            const option = document.createElement("option");
-            option.value = funcionario.funcionario_account;
-            option.textContent = funcionario.funcionario_account;
-            option.dataset.name = funcionario.funcionario_account;
-            select.appendChild(option);
-          });
-        }
-      });
+      if (selectAccountFuncionario) {
+        selectAccountFuncionario.innerHTML = "";
+
+        data.forEach((account) => {
+          const option = document.createElement("option");
+          option.value = account.funcionario_account;
+          option.textContent = account.funcionario_account;
+          selectAccountFuncionario.appendChild(option);
+        });
+      } else {
+        console.error(
+          "O seletor de contas do funcionário não está mais no DOM."
+        );
+      }
     })
-    .catch((error) =>
-      console.error("Erro ao buscar contas dos funcionários:", error)
-    );
+    .catch((error) => {
+      console.error("Erro ao buscar contas dos funcionários:", error);
+    });
 }
 
 export function getPizzasCategories() {
@@ -509,10 +576,19 @@ document.querySelector(".btn-addaccount").addEventListener("click", () => {
 
 const addPaymentButton = document.querySelector(".pagamento-bottom-adicionar");
 if (addPaymentButton) {
-  addPaymentButton.addEventListener("click", getFuncionariosNames);
+  addPaymentButton.addEventListener("click", () => {
+    getFuncionariosNames("funcionario-selector");
+  });
 } else {
   console.log("Botão de adicionar pagamento não encontrado");
 }
+
+document.querySelectorAll(".funcionario-selector").forEach((select) => {
+  select.addEventListener("change", (event) => {
+    const funcionarioId = event.target.value;
+    getFuncionariosAccounts(funcionarioId);
+  });
+});
 
 export function formatDateInput(event) {
   const input = event.target;
