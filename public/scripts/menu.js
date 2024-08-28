@@ -118,6 +118,8 @@ function toggleModal() {
   const btnPayments = document.querySelector(".btn-payments");
   const btnAddAccount = document.querySelector(".btn-addaccount");
   const btnTableVendas = document.querySelector(".btn-sales");
+  const btnMenuHome = document.querySelector(".btn-open-menu-home");
+  const btnMenuHomeClose = document.querySelector(".cardapio-close-btn");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
   const fechamentoContainer = document.querySelector(
@@ -128,6 +130,7 @@ function toggleModal() {
   );
   const addAccountContent = document.querySelector(".addaccount-content");
   const tableVendasContent = document.querySelector(".tabela-vendas-content");
+  const homeMenuContainer = document.querySelector(".cardapio-container");
   const body = document.querySelector(".body");
 
   function modalCloser() {
@@ -225,6 +228,14 @@ function toggleModal() {
     body.style.overflow = "auto";
 
     console.log(body);
+  });
+
+  btnMenuHome.addEventListener("click", () => {
+    homeMenuContainer.classList.add("cardapioActive");
+  });
+
+  btnMenuHomeClose.addEventListener("click", () => {
+    homeMenuContainer.classList.remove("cardapioActive");
   });
 
   console.log("Função toggleModal executada");

@@ -269,6 +269,85 @@ main {
   pointer-events: none;
 }
 
+.cardapio-container {
+  padding: 10px;
+  z-index: 9999;
+  position: absolute;
+  display: flex;
+  background-color: #fff;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.267);
+  border-radius: 8px;
+  left: 0px;
+  transform: translateX(-100%);
+  transition: transform 0.2s ease-in;
+}
+
+.cardapioActive {
+  transform: translateX(0);
+}
+
+.cardapio-content {
+  width: 100%;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.cardapio-content-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cardapio-content-top>hr {
+  width: 93%;
+  margin-left: 5px;
+  border: 1px dashed rgba(0, 0, 0, 0.192);
+}
+
+.cardapio-imgs-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cardapio-imgs-holder > img {
+  width: 40vw;
+  height: 900px;
+}
+
+.cardapio-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.cardapio-close-btn > img {
+  width: 100%;
+  height: 100%;
+}
+
+.btn-open-menu-home > img {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
+.btn-open-menu-home {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 0;
+  transform: translateX(-100);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
 ::-webkit-scrollbar-track {
   background: orange;
   border-radius: 10px;
