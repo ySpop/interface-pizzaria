@@ -96,9 +96,10 @@ app.post("/venda-submit", async (req, res) => {
     const orderNeighbourhood = formData["order-neighbourhood"]
       ? `'${escapeString(formData["order-neighbourhood"])}'`
       : "NULL";
-    const orderTime = formData["order-time"]
-      ? `'${escapeString(formData["order-time"])}'`
-      : "NULL";
+    const orderTime =
+      formData["order-time"] && formData["order-time"].trim() !== ""
+        ? `'${escapeString(formData["order-time"])}'`
+        : "'00:00'";
 
     const insertVendaQuery = `
       INSERT INTO vendas (
