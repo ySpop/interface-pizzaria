@@ -298,7 +298,7 @@ main {
   margin-bottom: 10px;
 }
 
-.cardapio-content-top>hr {
+.cardapio-content-top > hr {
   width: 93%;
   margin-left: 5px;
   border: 1px dashed rgba(0, 0, 0, 0.192);

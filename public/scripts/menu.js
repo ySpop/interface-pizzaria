@@ -120,6 +120,7 @@ function toggleModal() {
   const btnTableVendas = document.querySelector(".btn-sales");
   const btnMenuHome = document.querySelector(".btn-open-menu-home");
   const btnMenuHomeClose = document.querySelector(".cardapio-close-btn");
+  const btnBackupDB = document.querySelector(".btn-backupDB");
   const comandaContent = document.querySelector(".comanda-content");
   const addProductDBContent = document.querySelector(".add-product-content");
   const fechamentoContainer = document.querySelector(
@@ -236,6 +237,10 @@ function toggleModal() {
 
   btnMenuHomeClose.addEventListener("click", () => {
     homeMenuContainer.classList.remove("cardapioActive");
+  });
+
+  btnBackupDB.addEventListener("click", () => {
+    triggerBackup();
   });
 
   console.log("Função toggleModal executada");
@@ -512,5 +517,25 @@ export function paymentsSearchBar() {
     });
   } else {
     console.log("searchBar não encontrada!");
+  }
+}
+
+async function triggerBackup() {
+  try {
+    const response = await fetch("/backup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Backup realizado com sucesso:", data.message);
+    } else {
+      console.error("Erro ao realizar o backup:", data.message);
+    }
+  } catch (error) {
+    console.error("Erro na requisição:", error);
   }
 }

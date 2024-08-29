@@ -6,9 +6,13 @@ const bodyParser = require("body-parser");
 const moment = require("moment");
 const session = require("express-session");
 const { log } = require("console");
+const fs = require("fs");
 
 const app = express();
 const port = 3000;
+
+const backupDir = path.join(__dirname, "backup");
+const backupFile = path.join(backupDir, "dbPP.bak");
 
 // Configuração do SQL Server
 const sqlConfig = {
@@ -693,6 +697,46 @@ app.post("/contar-vendas", async (req, res) => {
     res.status(500).json({ error: "Erro ao contar vendas." });
   } finally {
     await sql.close();
+  }
+});
+
+async function backupDatabase() {
+  try {
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdirSync(backupDir, { recursive: true });
+      console.log(`Diretório criado: ${backupDir}`);
+    }
+
+    await sql.connect(sqlConfig);
+
+    const backupQuery = `
+      BACKUP DATABASE dbPP
+      TO DISK = '${backupFile}'
+      WITH FORMAT,
+      NAME = 'Backup Completo do dbPP';
+    `;
+
+    await sql.query(backupQuery);
+
+    console.log("Backup realizado com sucesso!");
+    return { success: true, message: "Backup realizado com sucesso!" };
+  } catch (err) {
+    console.error("Erro ao realizar o backup:", err);
+    return {
+      success: false,
+      message: `Erro ao realizar o backup: ${err.message}`,
+    };
+  } finally {
+    await sql.close();
+  }
+}
+
+app.post("/backup", async (req, res) => {
+  const result = await backupDatabase();
+  if (result.success) {
+    res.status(200).json({ message: result.message });
+  } else {
+    res.status(500).json({ message: result.message });
   }
 });
 
